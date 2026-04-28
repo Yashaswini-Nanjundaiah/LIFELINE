@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disasters</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+<div class="nav-inner">
+<div class="nav-links">
+<a class="nav-item" href="dashboard.html">Dashboard</a>
+<a class="nav-item active" href="disasters.html">Disasters</a>
+<a class="nav-item" href="camps.html">Camps</a>
+</div>
+</div>
+</nav>
+
+<main class="page-wrap">
+<h1 class="page-heading">Active Disasters</h1>
+
+<div class="card">
+<table class="data-table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Type</th>
+<th>Location</th>
+<th>Severity</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="disasterTable"></tbody>
+</table>
+</div>
+</main>
+
+<script>
+fetch("http://localhost:5000/api/disasters")
+.then(res => res.json())
+.then(data => {
+let rows = "";
+data.forEach(d => {
+rows += `
+<tr>
+<td>${d.id}</td>
+<td>${d.name}</td>
+<td>${d.type}</td>
+<td>${d.location}</td>
+<td>${d.severity}</td>
+<td>${d.status}</td>
+</tr>`;
+});
+document.getElementById("disasterTable").innerHTML = rows;
+});
+</script>
+
+</body>
+</html>

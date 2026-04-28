@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relief Camps</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+<div class="nav-inner">
+<div class="nav-links">
+<a class="nav-item" href="dashboard.html">Dashboard</a>
+<a class="nav-item" href="disasters.html">Disasters</a>
+<a class="nav-item active" href="camps.html">Camps</a>
+</div>
+</div>
+</nav>
+
+<main class="page-wrap">
+<h1 class="page-heading">Relief Camps</h1>
+
+<div class="card">
+<table class="data-table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Location</th>
+<th>Capacity</th>
+<th>Occupancy</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="campTable"></tbody>
+</table>
+</div>
+</main>
+
+<script>
+fetch("http://localhost:5000/api/camps")
+.then(res => res.json())
+.then(data => {
+let rows = "";
+data.forEach(c => {
+rows += `
+<tr>
+<td>${c.id}</td>
+<td>${c.name}</td>
+<td>${c.location}</td>
+<td>${c.capacity}</td>
+<td>${c.occupancy}</td>
+<td>${c.status}</td>
+</tr>`;
+});
+document.getElementById("campTable").innerHTML = rows;
+});
+</script>
+
+</body>
+</html>

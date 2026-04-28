@@ -169,57 +169,40 @@
 </footer>
 
 <div class="toast" id="toast"></div>
-
 <script src="script.js"></script>
+
 <script>
-  let reqCount = 0;
+async function submitRequest() {
+  const data = {
+    unit_name: document.getElementById("reqUnit").value,
+    officer_name: document.getElementById("reqOfficer").value,
+    supply_type: document.getElementById("supplyType").value,
+    quantity: document.getElementById("quantity").value,
+    priority_level: document.getElementById("priority").value,
+    required_date: document.getElementById("reqDate").value,
+    location: document.getElementById("location").value,
+    justification: document.getElementById("justification").value
+  };
 
-  function submitRequest() {
-    const unit = document.getElementById("reqUnit").value.trim();
-    const type = document.getElementById("supplyType").value;
-    const qty = document.getElementById("quantity").value;
-    const priority = document.getElementById("priority").value;
+  const res = await fetch("http://localhost:5000/requests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 
-    if (!unit || !type || !qty || !priority) {
-      showToast("Please fill in all required fields before submitting.");
-      return;
-    }
+  const result = await res.json();
 
-    reqCount++;
-    const id = "REQ-" + String(100 + reqCount).padStart(3, "0");
-    const pClass = priority.startsWith("High") ? "badge-red" : priority.startsWith("Medium") ? "badge-gold" : "badge-navy";
-    const shortP = priority.split("—")[0].trim();
+  showToast(result.message);
+  clearForm();
+}
 
-    const entry = `
-      <div style="padding:10px 0;border-bottom:1px solid var(--lightgray);">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-          <span style="font-size:13px;font-weight:600;">${type}</span>
-          <span class="badge ${pClass}">${shortP}</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);">Qty: ${qty} &nbsp;|&nbsp; ${id} &nbsp;|&nbsp; <span class="badge badge-gold" style="font-size:10px;">Pending Review</span></div>
-      </div>`;
-
-    const container = document.getElementById("myRequests");
-    if (reqCount === 1) container.innerHTML = "";
-    container.insertAdjacentHTML("afterbegin", entry);
-
-    showToast(`Request ${id} submitted. Pending admin approval.`);
-    clearForm();
-  }
-
-  function clearForm() {
-    ["reqUnit","reqOfficer","supplyType","quantity","priority","reqDate","location","justification"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = "";
-    });
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 3500);
-  }
+function clearForm() {
+  document.querySelectorAll("input, textarea, select").forEach(el => {
+    el.value = "";
+  });
+}
 </script>
 </body>
 </html>

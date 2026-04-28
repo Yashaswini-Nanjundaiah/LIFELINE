@@ -183,13 +183,41 @@
 </footer>
 
 <script src="script.js"></script>
+
 <script>
-  function filterTable(val) {
-    const rows = document.querySelectorAll("#inventoryTable tbody tr");
-    rows.forEach(row => {
-      row.style.display = row.textContent.toLowerCase().includes(val.toLowerCase()) ? "" : "none";
-    });
-  }
+async function loadInventory() {
+  const res = await fetch("http://localhost:5000/inventory");
+  const data = await res.json();
+
+  const tbody = document.querySelector("#inventoryTable tbody");
+  tbody.innerHTML = "";
+
+  data.forEach(item => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${item.item_name}</td>
+        <td>${item.category}</td>
+        <td>${item.total_stock}</td>
+        <td>${item.deployed}</td>
+        <td>${item.available}</td>
+        <td>${item.warehouse}</td>
+        <td>${item.status}</td>
+      </tr>
+    `;
+  });
+}
+
+loadInventory();
+
+function filterTable(val) {
+  const rows = document.querySelectorAll("#inventoryTable tbody tr");
+  rows.forEach(row => {
+    row.style.display =
+      row.textContent.toLowerCase().includes(val.toLowerCase())
+        ? ""
+        : "none";
+  });
+}
 </script>
 </body>
 </html>
