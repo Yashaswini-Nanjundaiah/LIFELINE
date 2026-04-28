@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Supplies — LifeLine | NDMA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- GOV TOPBAR -->
+<div class="gov-topbar">
+  <span>Government of India &nbsp;|&nbsp; Ministry of Home Affairs &nbsp;|&nbsp; National Disaster Management Authority</span>
+  <div><a href="#">Screen Reader</a><a href="#">हिन्दी</a><a href="#">Help</a></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="emblem"><div class="emblem-inner">L</div></div>
+    <div>
+      <div class="header-title">Project Lifeline</div>
+      <div class="header-dept">Integrated Emergency Response Platform &mdash; NDMA</div>
+      <div class="header-sub">Ministry of Home Affairs &nbsp;&bull;&nbsp; Government of India</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a class="nav-item" href="dashboard.html">Dashboard</a>
+      <a class="nav-item active" href="request.html">Request Supplies</a>
+      <a class="nav-item" href="inventry.html">Inventory</a>
+      <a class="nav-item" href="admin.html">Admin Panel</a>
+    </div>
+    <a class="nav-logout" href="index.html">Logout</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-wrap">
+  <div class="section-label">Resource Requisition</div>
+  <h1 class="page-heading">Request Emergency Supplies</h1>
+  <p class="page-subheading">Submit a formal requisition for emergency resources. All requests are reviewed by the Admin Panel.</p>
+  <div class="gold-rule"></div>
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem;align-items:start;">
+
+    <!-- FORM -->
+    <div class="card">
+      <div class="card-title">Supply Requisition Form</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="reqUnit">Requesting Unit / District</label>
+          <input class="form-input" type="text" id="reqUnit" placeholder="e.g. District Collector, Puri">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reqOfficer">Officer Name &amp; Designation</label>
+          <input class="form-input" type="text" id="reqOfficer" placeholder="e.g. Shri R. Kumar, IAS">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="supplyType">Supply Category</label>
+          <select class="form-select" id="supplyType">
+            <option value="">— Select Category —</option>
+            <option>Food Packets</option>
+            <option>Medical Kits</option>
+            <option>Rescue Boats</option>
+            <option>Tarpaulins / Shelter Sheets</option>
+            <option>Water Purification Units</option>
+            <option>Blankets &amp; Sleeping Kits</option>
+            <option>Power Generators</option>
+            <option>Life Jackets</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="quantity">Quantity Required</label>
+          <input class="form-input" type="number" id="quantity" placeholder="Enter quantity" min="1">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="priority">Priority Level</label>
+          <select class="form-select" id="priority">
+            <option value="">— Select Priority —</option>
+            <option>High — Immediate Life Risk</option>
+            <option>Medium — Required within 24 hours</option>
+            <option>Low — Required within 72 hours</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reqDate">Date Required By</label>
+          <input class="form-input" type="date" id="reqDate">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="location">Delivery Location / GPS Coordinates</label>
+        <input class="form-input" type="text" id="location" placeholder="e.g. Puri Relief Camp, Odisha / 19.8135°N, 85.8312°E">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="justification">Justification / Situation Report</label>
+        <textarea class="form-input" id="justification" rows="4" placeholder="Describe the emergency situation, number of people affected, and why these supplies are needed..." style="resize:vertical;"></textarea>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:0.5rem;">
+        <button class="btn btn-primary" onclick="submitRequest()">Submit Requisition</button>
+        <button class="btn btn-outline" onclick="clearForm()">Clear Form</button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <!-- Guidelines -->
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="card-title">Submission Guidelines</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--muted);">
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--gold);font-weight:700;flex-shrink:0;">01</span>
+            <span>All requests must be authorised by a gazetted officer or district collector.</span>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--gold);font-weight:700;flex-shrink:0;">02</span>
+            <span>High-priority requests are reviewed within 2 hours of submission.</span>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--gold);font-weight:700;flex-shrink:0;">03</span>
+            <span>Provide accurate delivery coordinates for faster dispatch.</span>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--gold);font-weight:700;flex-shrink:0;">04</span>
+            <span>Check inventory page before submitting to confirm stock availability.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Requests -->
+      <div class="card">
+        <div class="card-title">My Recent Requests</div>
+        <div id="myRequests">
+          <div style="font-size:13px;color:var(--muted);text-align:center;padding:1rem 0;">No requests submitted yet in this session.</div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="card" style="margin-top:1.25rem;border-top:3px solid var(--red2);">
+        <div class="card-title" style="color:var(--red2);">Emergency Helpline</div>
+        <div style="font-size:24px;font-family:'EB Garamond',serif;font-weight:600;color:var(--red2);">112</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">For immediate life-threatening situations, call the national emergency helpline directly.</div>
+        <div style="margin-top:12px;font-size:13px;"><strong>NDRF Control Room:</strong> 011-24363260</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2026 National Disaster Management Authority, Government of India &nbsp;|&nbsp;
+  <a href="#">NDMA</a> &nbsp;|&nbsp; <a href="#">MHA</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+<script>
+  let reqCount = 0;
+
+  function submitRequest() {
+    const unit = document.getElementById("reqUnit").value.trim();
+    const type = document.getElementById("supplyType").value;
+    const qty = document.getElementById("quantity").value;
+    const priority = document.getElementById("priority").value;
+
+    if (!unit || !type || !qty || !priority) {
+      showToast("Please fill in all required fields before submitting.");
+      return;
+    }
+
+    reqCount++;
+    const id = "REQ-" + String(100 + reqCount).padStart(3, "0");
+    const pClass = priority.startsWith("High") ? "badge-red" : priority.startsWith("Medium") ? "badge-gold" : "badge-navy";
+    const shortP = priority.split("—")[0].trim();
+
+    const entry = `
+      <div style="padding:10px 0;border-bottom:1px solid var(--lightgray);">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;">${type}</span>
+          <span class="badge ${pClass}">${shortP}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);">Qty: ${qty} &nbsp;|&nbsp; ${id} &nbsp;|&nbsp; <span class="badge badge-gold" style="font-size:10px;">Pending Review</span></div>
+      </div>`;
+
+    const container = document.getElementById("myRequests");
+    if (reqCount === 1) container.innerHTML = "";
+    container.insertAdjacentHTML("afterbegin", entry);
+
+    showToast(`Request ${id} submitted. Pending admin approval.`);
+    clearForm();
+  }
+
+  function clearForm() {
+    ["reqUnit","reqOfficer","supplyType","quantity","priority","reqDate","location","justification"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3500);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeLine — Login | National Disaster Management Authority</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- Login Box -->
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="emblem">
+        <div class="emblem-inner">L</div>
+      </div>
+      <h1>Project Lifeline</h1>
+      <p>National Disaster Management </p>
+      <div class="login-divider"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="username">User ID / Username</label>
+      <input class="form-input" type="text" id="username" placeholder="Enter your user ID">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <input class="form-input" type="password" id="password" placeholder="Enter your password">
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;padding:12px;font-size:13px;" onclick="login()">
+      Sign In to Portal
+    </button>
+
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #E8E6DF;text-align:center;">
+      <span style="font-size:12px;color:#5A5A6A;">For access issues contact: </span>
+      <a href="tel:011-24363260" style="font-size:12px;color:#0A2D5E;font-weight:600;">011-24363260</a>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <p style="margin-top:1.5rem;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-align:center;">
+    Ministry of Home Affairs &nbsp;|&nbsp; Government of India &nbsp;|&nbsp; Authorised Personnel Only
+  </p>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+<script>
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (username === "" || password === "") {
+      showToast("Please enter your User ID and Password.");
+      return;
+    }
+    showToast("Authentication successful. Redirecting...");
+    setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+
+  document.addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+</script>
+
+</body>
+</html>

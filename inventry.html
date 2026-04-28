@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory — LifeLine | NDMA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- GOV TOPBAR -->
+<div class="gov-topbar">
+  <span>Government of India &nbsp;|&nbsp; Ministry of Home Affairs &nbsp;|&nbsp; National Disaster Management Authority</span>
+  <div><a href="#">Screen Reader</a><a href="#">हिन्दी</a><a href="#">Help</a></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="emblem"><div class="emblem-inner">L</div></div>
+    <div>
+      <div class="header-title">Project Lifeline</div>
+      <div class="header-dept">Integrated Emergency Response Platform &mdash; NDMA</div>
+      <div class="header-sub">Ministry of Home Affairs &nbsp;&bull;&nbsp; Government of India</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a class="nav-item" href="dashboard.html">Dashboard</a>
+      <a class="nav-item" href="request.html">Request Supplies</a>
+      <a class="nav-item active" href="inventry.html">Inventory</a>
+      <a class="nav-item" href="admin.html">Admin Panel</a>
+    </div>
+    <a class="nav-logout" href="index.html">Logout</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-wrap">
+  <div class="section-label">Logistics &amp; Supply Chain</div>
+  <h1 class="page-heading">Available Supplies &amp; Inventory</h1>
+  <p class="page-subheading">Current stock levels across all NDMA warehouses and forward deployment zones</p>
+  <div class="gold-rule"></div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="inv-grid">
+    <div class="inv-card">
+      <div class="inv-item-name">Food Packets</div>
+      <div class="inv-item-qty">50,000</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>75%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar high" style="width:75%"></div></div>
+      </div>
+    </div>
+    <div class="inv-card warn">
+      <div class="inv-item-name">Medical Kits</div>
+      <div class="inv-item-qty">2,000</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>40%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar mid" style="width:40%"></div></div>
+      </div>
+    </div>
+    <div class="inv-card critical">
+      <div class="inv-item-name">Rescue Boats</div>
+      <div class="inv-item-qty">120</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>12%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar low" style="width:12%"></div></div>
+      </div>
+    </div>
+    <div class="inv-card">
+      <div class="inv-item-name">Tarpaulins</div>
+      <div class="inv-item-qty">8,000</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>60%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar high" style="width:60%"></div></div>
+      </div>
+    </div>
+    <div class="inv-card warn">
+      <div class="inv-item-name">Water Purification Units</div>
+      <div class="inv-item-qty">500</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>38%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar mid" style="width:38%"></div></div>
+      </div>
+    </div>
+    <div class="inv-card">
+      <div class="inv-item-name">Blankets &amp; Sleeping Kits</div>
+      <div class="inv-item-qty">15,000</div>
+      <div class="inv-item-unit">units available</div>
+      <div class="inv-item-bar">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>Stock Level</span><span>82%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar high" style="width:82%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILED TABLE -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <div class="card-title" style="margin-bottom:0;border:none;padding:0;">Detailed Inventory Register</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input class="form-input" type="text" placeholder="Search supplies..." style="width:200px;padding:7px 12px;font-size:13px;" oninput="filterTable(this.value)">
+        <button class="btn btn-outline btn-sm">Export</button>
+      </div>
+    </div>
+    <table class="data-table" id="inventoryTable">
+      <thead>
+        <tr>
+          <th>Supply Item</th>
+          <th>Category</th>
+          <th>Total Stock</th>
+          <th>Deployed</th>
+          <th>Available</th>
+          <th>Warehouse</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Food Packets (Ready-to-Eat)</td><td>Food &amp; Nutrition</td><td>62,400</td><td>12,400</td><td style="font-weight:600;">50,000</td><td>New Delhi WH-1</td>
+          <td><span class="badge badge-green">Adequate</span></td>
+        </tr>
+        <tr>
+          <td>Medical First Aid Kits</td><td>Medical</td><td>3,600</td><td>1,600</td><td style="font-weight:600;">2,000</td><td>Bhubaneswar WH-3</td>
+          <td><span class="badge badge-gold">Low Stock</span></td>
+        </tr>
+        <tr>
+          <td>Rescue Boats (Inflatable)</td><td>Search &amp; Rescue</td><td>136</td><td>105</td><td style="font-weight:600;color:var(--red2);">31</td><td>Patna WH-2</td>
+          <td><span class="badge badge-red">Critical</span></td>
+        </tr>
+        <tr>
+          <td>Tarpaulins (Heavy Duty)</td><td>Shelter</td><td>11,200</td><td>3,200</td><td style="font-weight:600;">8,000</td><td>Chennai WH-4</td>
+          <td><span class="badge badge-green">Adequate</span></td>
+        </tr>
+        <tr>
+          <td>Water Purification Units</td><td>Water &amp; Sanitation</td><td>810</td><td>310</td><td style="font-weight:600;">500</td><td>Hyderabad WH-5</td>
+          <td><span class="badge badge-gold">Low Stock</span></td>
+        </tr>
+        <tr>
+          <td>Blankets &amp; Sleeping Kits</td><td>Shelter</td><td>18,200</td><td>3,200</td><td style="font-weight:600;">15,000</td><td>New Delhi WH-1</td>
+          <td><span class="badge badge-green">Adequate</span></td>
+        </tr>
+        <tr>
+          <td>Power Generators (Portable)</td><td>Infrastructure</td><td>280</td><td>210</td><td style="font-weight:600;color:var(--gold);">70</td><td>Kolkata WH-6</td>
+          <td><span class="badge badge-gold">Low Stock</span></td>
+        </tr>
+        <tr>
+          <td>Life Jackets</td><td>Search &amp; Rescue</td><td>5,000</td><td>3,800</td><td style="font-weight:600;color:var(--red2);">1,200</td><td>Bhubaneswar WH-3</td>
+          <td><span class="badge badge-red">Critical</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2026 National Disaster Management Authority, Government of India &nbsp;|&nbsp;
+  <a href="#">NDMA</a> &nbsp;|&nbsp; <a href="#">MHA</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  function filterTable(val) {
+    const rows = document.querySelectorAll("#inventoryTable tbody tr");
+    rows.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(val.toLowerCase()) ? "" : "none";
+    });
+  }
+</script>
+</body>
+</html>

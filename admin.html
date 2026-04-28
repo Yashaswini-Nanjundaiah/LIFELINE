@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — LifeLine | NDMA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- GOV TOPBAR -->
+<div class="gov-topbar">
+  <span>Government of India &nbsp;|&nbsp; Ministry of Home Affairs &nbsp;|&nbsp; National Disaster Management Authority</span>
+  <div><a href="#">Screen Reader</a><a href="#">हिन्दी</a><a href="#">Help</a></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="emblem"><div class="emblem-inner">L</div></div>
+    <div>
+      <div class="header-title">Project Lifeline</div>
+      <div class="header-dept">Integrated Emergency Response Platform &mdash; NDMA</div>
+      <div class="header-sub">Ministry of Home Affairs &nbsp;&bull;&nbsp; Government of India</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a class="nav-item" href="dashboard.html">Dashboard</a>
+      <a class="nav-item" href="request.html">Request Supplies</a>
+      <a class="nav-item" href="inventry.html">Inventory</a>
+      <a class="nav-item active" href="admin.html">Admin Panel</a>
+    </div>
+    <a class="nav-logout" href="index.html">Logout</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-wrap">
+  <div class="section-label">Administrative Control</div>
+  <h1 class="page-heading">Admin Panel</h1>
+  <p class="page-subheading">Review and action all pending supply requests from field units and districts</p>
+  <div class="gold-rule"></div>
+
+  <!-- STATS -->
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="stat-card gold">
+      <div class="stat-num" id="pendingCount">5</div>
+      <div class="stat-label">Pending Requests</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num" id="approvedCount">12</div>
+      <div class="stat-label">Approved Today</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num" id="rejectedCount">3</div>
+      <div class="stat-label">Rejected Today</div>
+    </div>
+  </div>
+
+  <!-- REQUESTS TABLE -->
+  <div class="card">
+    <div class="card-title">Pending Supply Requests</div>
+    <table class="data-table" id="requestsTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Requestor / Unit</th>
+          <th>Supply Item</th>
+          <th>Quantity</th>
+          <th>Priority</th>
+          <th>Submitted</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="requestsBody">
+        <!-- Rows injected by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AUDIT LOG -->
+  <div class="card" style="margin-top:1.5rem;">
+    <div class="card-title">Action Log</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Timestamp</th><th>Admin</th><th>Request ID</th><th>Action</th><th>Remarks</th></tr>
+      </thead>
+      <tbody id="auditLog">
+        <tr>
+          <td>15 Apr 2026, 08:45 IST</td>
+          <td>Supt. Sharma</td>
+          <td>#REQ-019</td>
+          <td><span class="badge badge-green">Approved</span></td>
+          <td>Adequate stock available</td>
+        </tr>
+        <tr>
+          <td>15 Apr 2026, 07:30 IST</td>
+          <td>Supt. Sharma</td>
+          <td>#REQ-018</td>
+          <td><span class="badge badge-red">Rejected</span></td>
+          <td>Duplicate request</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2026 National Disaster Management Authority, Government of India &nbsp;|&nbsp;
+  <a href="#">NDMA</a> &nbsp;|&nbsp; <a href="#">MHA</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+<script>
+  const requests = [
+    { id:"REQ-020", unit:"District Collector, Puri", item:"Food Packets", qty:500, priority:"High", date:"15 Apr, 09:10" },
+    { id:"REQ-021", unit:"SDRF Unit 4, Odisha", item:"Medical Kits", qty:80, priority:"High", date:"15 Apr, 08:55" },
+    { id:"REQ-022", unit:"Relief Camp, Bhubaneswar", item:"Tarpaulins", qty:200, priority:"Medium", date:"15 Apr, 08:20" },
+    { id:"REQ-023", unit:"NDRF Bn 6, Chamoli", item:"Rescue Equipment", qty:15, priority:"High", date:"15 Apr, 07:45" },
+    { id:"REQ-024", unit:"Block Dev. Office, Barmer", item:"Water Purif. Units", qty:10, priority:"Low", date:"14 Apr, 22:30" },
+  ];
+
+  let pending = requests.length;
+  let approved = 12;
+  let rejected = 3;
+
+  function renderTable() {
+    const tbody = document.getElementById("requestsBody");
+    tbody.innerHTML = "";
+    requests.forEach((r, i) => {
+      if (r.done) return;
+      const pBadge = r.priority === "High" ? "badge-red" : r.priority === "Medium" ? "badge-gold" : "badge-navy";
+      tbody.innerHTML += `
+        <tr id="row-${i}">
+          <td style="color:var(--muted);font-size:12px;">#${r.id}</td>
+          <td>${r.unit}</td>
+          <td>${r.item}</td>
+          <td style="font-weight:600;">${r.qty}</td>
+          <td><span class="badge ${pBadge}">${r.priority}</span></td>
+          <td style="font-size:12px;color:var(--muted);">${r.date}</td>
+          <td><span class="badge badge-gold">Pending</span></td>
+          <td style="display:flex;gap:6px;">
+            <button class="btn btn-success btn-sm" onclick="action(${i},'approve')">Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="action(${i},'reject')">Reject</button>
+          </td>
+        </tr>`;
+    });
+    if (pending === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem;">All requests have been actioned.</td></tr>`;
+    }
+  }
+
+  function action(idx, type) {
+    requests[idx].done = true;
+    pending--;
+    if (type === 'approve') { approved++; showToast(`Request #${requests[idx].id} approved successfully.`); }
+    else { rejected++; showToast(`Request #${requests[idx].id} has been rejected.`); }
+    document.getElementById("pendingCount").textContent = pending;
+    document.getElementById("approvedCount").textContent = approved;
+    document.getElementById("rejectedCount").textContent = rejected;
+    addAuditLog(requests[idx].id, type);
+    renderTable();
+  }
+
+  function addAuditLog(id, type) {
+    const now = new Date();
+    const ts = `15 Apr 2026, ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} IST`;
+    const badge = type === 'approve' ? `<span class="badge badge-green">Approved</span>` : `<span class="badge badge-red">Rejected</span>`;
+    const row = `<tr><td>${ts}</td><td>Current Admin</td><td>#${id}</td><td>${badge}</td><td>—</td></tr>`;
+    document.getElementById("auditLog").insertAdjacentHTML("afterbegin", row);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+
+  renderTable();
+</script>
+</body>
+</html>

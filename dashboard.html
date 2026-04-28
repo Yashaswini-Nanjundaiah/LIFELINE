@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — LifeLine | NDMA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- GOV TOPBAR -->
+<div class="gov-topbar">
+  <span>Government of India &nbsp;|&nbsp; Ministry of Home Affairs &nbsp;|&nbsp; National Disaster Management Authority</span>
+  <div><a href="#">Screen Reader</a><a href="#">हिन्दी</a><a href="#">Help</a></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="emblem"><div class="emblem-inner">L</div></div>
+    <div>
+      <div class="header-title">Project Lifeline</div>
+      <div class="header-dept">Integrated Emergency Response Platform &mdash; NDMA</div>
+      <div class="header-sub">Ministry of Home Affairs &nbsp;&bull;&nbsp; Government of India</div>
+    </div>
+  </div>
+</header>
+
+<!-- ALERT STRIP -->
+<div class="alert-strip">
+  <span class="badge" style="background:#fff;color:#A31515;">Active Alert</span>
+  <span>Cyclone Warning: Eastern coastal districts on red alert. NDRF battalions deployed. Evacuations underway.</span>
+</div>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a class="nav-item active" href="dashboard.html">Dashboard</a>
+      <a class="nav-item" href="request.html">Request Supplies</a>
+      <a class="nav-item" href="inventry.html">Inventory</a>
+      <a class="nav-item" href="admin.html">Admin Panel</a>
+    </div>
+    <a class="nav-logout" href="index.html">Logout</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-wrap">
+  <div class="section-label">Operational Overview</div>
+  <h1 class="page-heading">Command Dashboard</h1>
+  <p class="page-subheading">Real-time situational overview &mdash; Last updated: 15 Apr 2026, 09:14 IST</p>
+  <div class="gold-rule"></div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card red">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Active Disaster Zones</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-num">24</div>
+      <div class="stat-label">Pending Supply Requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1,248</div>
+      <div class="stat-label">NDRF Personnel Deployed</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">4.2L</div>
+      <div class="stat-label">Citizens in Shelters</div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="section-label">Quick Access</div>
+  <div class="quick-actions" style="margin-top:0.75rem;">
+    <a class="action-card" href="request.html">
+      <div class="action-icon" style="background:#FCEBEB;">
+        <svg width="20" height="20" fill="none" stroke="#A31515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+      </div>
+      <div class="action-name">Request Supplies</div>
+      <div class="action-desc">Submit an emergency resource request</div>
+    </a>
+    <a class="action-card" href="inventry.html">
+      <div class="action-icon" style="background:#E6F1FB;">
+        <svg width="20" height="20" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      </div>
+      <div class="action-name">View Inventory</div>
+      <div class="action-desc">Check available supplies and stock levels</div>
+    </a>
+    <a class="action-card" href="admin.html">
+      <div class="action-icon" style="background:#FAEEDA;">
+        <svg width="20" height="20" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+      </div>
+      <div class="action-name">Admin Panel</div>
+      <div class="action-desc">Approve or reject pending requests</div>
+    </a>
+  </div>
+
+  <!-- LOWER GRID -->
+  <div class="dash-grid">
+
+    <!-- Recent Requests -->
+    <div class="card">
+      <div class="card-title">Recent Supply Requests</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Requestor</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>District Collector, Puri</td>
+            <td>Food Packets</td>
+            <td>500</td>
+            <td><span class="badge badge-gold">Pending</span></td>
+          </tr>
+          <tr>
+            <td>SDRF Unit 4, Odisha</td>
+            <td>Medical Kits</td>
+            <td>80</td>
+            <td><span class="badge badge-green">Approved</span></td>
+          </tr>
+          <tr>
+            <td>Relief Camp, Bhubaneswar</td>
+            <td>Tarpaulins</td>
+            <td>200</td>
+            <td><span class="badge badge-green">Approved</span></td>
+          </tr>
+          <tr>
+            <td>NDRF Bn 6, Chamoli</td>
+            <td>Rescue Equipment</td>
+            <td>15</td>
+            <td><span class="badge badge-red">Rejected</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Live Alerts -->
+    <div class="card">
+      <div class="card-title">Active Situation Reports</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="padding:12px;border-left:4px solid var(--red2);background:#FAFAF8;border-radius:0 2px 2px 0;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:600;">Odisha — Coastal Districts</span>
+            <span class="badge badge-red">High</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);">Cyclone Asna — 14 NDRF battalions deployed. 78% evacuation complete.</div>
+        </div>
+        <div style="padding:12px;border-left:4px solid var(--red2);background:#FAFAF8;border-radius:0 2px 2px 0;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:600;">Uttarakhand — Chamoli</span>
+            <span class="badge badge-red">High</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);">Flash flood — glacial lake outburst. SDRF mobilised.</div>
+        </div>
+        <div style="padding:12px;border-left:4px solid var(--gold);background:#FAFAF8;border-radius:0 2px 2px 0;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:600;">Rajasthan — Barmer</span>
+            <span class="badge badge-gold">Moderate</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);">Extreme heat wave. IMD red alert. Cooling centres operational.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Summary -->
+    <div class="card full">
+      <div class="card-title">Inventory Summary</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Supply Item</th><th>Available Units</th><th>Deployed</th><th>Stock Level</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Food Packets</td><td>50,000</td><td>12,400</td>
+            <td><div class="progress-bar-wrap"><div class="progress-bar high" style="width:75%"></div></div></td>
+            <td><span class="badge badge-green">Adequate</span></td>
+          </tr>
+          <tr>
+            <td>Medical Kits</td><td>2,000</td><td>1,600</td>
+            <td><div class="progress-bar-wrap"><div class="progress-bar mid" style="width:40%"></div></div></td>
+            <td><span class="badge badge-gold">Low</span></td>
+          </tr>
+          <tr>
+            <td>Tarpaulins / Shelter Sheets</td><td>8,000</td><td>3,200</td>
+            <td><div class="progress-bar-wrap"><div class="progress-bar high" style="width:60%"></div></div></td>
+            <td><span class="badge badge-green">Adequate</span></td>
+          </tr>
+          <tr>
+            <td>Rescue Boats</td><td>120</td><td>105</td>
+            <td><div class="progress-bar-wrap"><div class="progress-bar low" style="width:12%"></div></div></td>
+            <td><span class="badge badge-red">Critical</span></td>
+          </tr>
+          <tr>
+            <td>Water Purification Units</td><td>500</td><td>310</td>
+            <td><div class="progress-bar-wrap"><div class="progress-bar mid" style="width:38%"></div></div></td>
+            <td><span class="badge badge-gold">Low</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2026 National Disaster Management Authority, Government of India &nbsp;|&nbsp;
+  <a href="#">NDMA</a> &nbsp;|&nbsp; <a href="#">MHA</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
