@@ -407,7 +407,7 @@ app.post("/api/agencies", (req, res) => {
 // ================= DISASTER_AGENCY =================
 
 // GET mappings
-app.get("/api/disaster-agency", (req, res) => {
+app.get("/api/disaster-agencies", (req, res) => {
   const sql = `
     SELECT *
     FROM disaster_agency
@@ -424,7 +424,7 @@ app.get("/api/disaster-agency", (req, res) => {
 });
 
 // ADD mapping
-app.post("/api/disaster-agency", (req, res) => {
+app.post("/api/disaster-agencies", (req, res) => {
   const { disaster_id, agency_id } = req.body;
 
   const sql = `
