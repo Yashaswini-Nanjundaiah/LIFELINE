@@ -22,12 +22,7 @@ const ROLES = {
     color: '#ffb347',
     pages: ['dashboard','resources','relief','volunteers']
   },
-  volunteer: {
-    label: 'Volunteer Supervisor',
-    icon: '🤝',
-    color: '#00e676',
-    pages: ['dashboard','volunteers','relief']
-  }
+  
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -74,7 +69,7 @@ const NAV_ITEMS = [
     { id:'relief',     icon:'🏕️', label:'Relief Camps', href:'relief_camps.html' },
     { id:'resources',  icon:'📦', label:'Resources',     href:'resources.html' },
     { id:'agencies',   icon:'🏢', label:'Agencies',      href:'agencies.html' },
-    { id:'volunteers', icon:'🤝', label:'Volunteers',    href:'volunteers.html' },
+    
   ]},
   { section: 'Operations', items: [
     { id:'alerts', icon:'🚨', label:'Alerts', href:'alerts.html', badge:3 },

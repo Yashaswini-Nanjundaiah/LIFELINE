@@ -6,160 +6,669 @@
 <title>Victims — LIFELINE</title>
 <link rel="stylesheet" href="shared.css">
 </head>
+
 <body>
+
 <div id="sidebarRoot"></div>
+
 <div class="main">
+
   <div id="topbarRoot"></div>
+
   <div class="content">
+
     <div class="page-header">
       <h2>Victim Registry</h2>
-      <p>Track all registered victims — identity, location, injuries, and relief assignment</p>
+      <p>
+        Track all registered victims — identity,
+        location, injuries, and relief assignment
+      </p>
       <div class="header-accent"></div>
     </div>
 
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Victims</div><div class="stat-val" id="c1">0</div><div class="stat-sub">All registered</div></div>
-      <div class="stat-card"><div class="stat-label">Sheltered</div><div class="stat-val" id="c2">0</div><div class="stat-sub">In relief camps</div></div>
-      <div class="stat-card"><div class="stat-label">Critical Injuries</div><div class="stat-val" id="c3">0</div><div class="stat-sub">Needs urgent care</div></div>
-      <div class="stat-card"><div class="stat-label">Missing Persons</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Under investigation</div></div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Victims</div>
+        <div class="stat-val" id="c1">0</div>
+        <div class="stat-sub">All registered</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Sheltered</div>
+        <div class="stat-val" id="c2">0</div>
+        <div class="stat-sub">In relief camps</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Critical Injuries</div>
+        <div class="stat-val" id="c3">0</div>
+        <div class="stat-sub">Needs urgent care</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Missing Persons</div>
+        <div class="stat-val" id="c4">0</div>
+        <div class="stat-sub">Under investigation</div>
+      </div>
+
     </div>
 
     <div class="table-card">
+
       <div class="table-card-header">
+
         <h3>👥 VICTIM RECORDS</h3>
+
         <div class="actions">
-          <button class="btn btn-outline btn-sm" onclick="exportData()">↓ Export</button>
-          <button class="btn btn-primary btn-sm" id="addBtn" onclick="openModal('victimModal')">+ Register Victim</button>
+
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="exportData()"
+          >
+            ↓ Export
+          </button>
+
+          <button
+            class="btn btn-primary btn-sm"
+            onclick="openModal('victimModal')"
+          >
+            + Register Victim
+          </button>
+
         </div>
+
       </div>
+
       <div style="padding:14px 22px">
+
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search by name, ID, location, disaster…" oninput="filterVictims()">
-          <select id="injFilter" onchange="filterVictims()">
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by name, ID, location, disaster…"
+            oninput="filterVictims()"
+          >
+
+          <select
+            id="injFilter"
+            onchange="filterVictims()"
+          >
+
             <option value="">All Severities</option>
-            <option>Minor</option><option>Moderate</option><option>Critical</option><option>None</option>
+
+            <option>Minor</option>
+            <option>Moderate</option>
+            <option>Critical</option>
+            <option>None</option>
+
           </select>
+
         </div>
+
       </div>
+
       <table id="victimTable">
+
         <thead>
-          <tr><th>Victim ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Contact</th><th>Disaster</th><th>Injury</th><th>Sheltered In</th><th>Actions</th></tr>
+
+          <tr>
+
+            <th>Victim ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Disaster</th>
+            <th>Injury</th>
+            <th>Sheltered In</th>
+            <th>Actions</th>
+
+          </tr>
+
         </thead>
+
         <tbody id="victimBody"></tbody>
+
       </table>
+
     </div>
+
   </div>
+
 </div>
 
 <div class="modal-overlay" id="victimModal">
+
   <div class="modal">
+
     <div class="modal-header">
+
       <h3>👤 REGISTER VICTIM</h3>
-      <button class="modal-close" onclick="closeModal('victimModal')">✕</button>
+
+      <button
+        class="modal-close"
+        onclick="closeModal('victimModal')"
+      >
+        ✕
+      </button>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Victim ID</label><input type="text" id="v_id" placeholder="e.g. V-2025-0184"></div>
-      <div class="form-group"><label>Full Name</label><input type="text" id="v_name" placeholder="Enter full name"></div>
+
+      <div class="form-group">
+
+        <label>Victim ID</label>
+
+        <input
+          type="text"
+          id="v_id"
+          placeholder="e.g. V-2025-0184"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Full Name</label>
+
+        <input
+          type="text"
+          id="v_name"
+          placeholder="Enter full name"
+        >
+
+      </div>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Age</label><input type="number" id="v_age" placeholder="Age"></div>
-      <div class="form-group"><label>Gender</label><select id="v_gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+
+      <div class="form-group">
+
+        <label>Age</label>
+
+        <input
+          type="number"
+          id="v_age"
+          placeholder="Age"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Gender</label>
+
+        <select id="v_gender">
+
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Contact Number</label><input type="text" id="v_contact" placeholder="10-digit mobile"></div>
-      <div class="form-group"><label>Address</label><input type="text" id="v_addr" placeholder="Last known address"></div>
+
+      <div class="form-group">
+
+        <label>Contact Number</label>
+
+        <input
+          type="text"
+          id="v_contact"
+          placeholder="10-digit mobile"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Status</label>
+
+        <select id="v_status">
+
+          <option>Located</option>
+          <option>Missing</option>
+          <option>Deceased</option>
+
+        </select>
+
+      </div>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Associated Disaster</label><select id="v_disaster"><option>Cyclone Biparjoy</option><option>Bihar Floods 2025</option><option>Joshimath Landslide</option><option>Manipur Earthquake</option><option>Assam Floods 2025</option></select></div>
-      <div class="form-group"><label>Injury Severity</label><select id="v_injury"><option>None</option><option>Minor</option><option>Moderate</option><option>Critical</option></select></div>
+
+      <div class="form-group">
+
+        <label>Associated Disaster ID</label>
+
+        <input
+          type="number"
+          id="v_disaster"
+          placeholder="Enter disaster ID"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Injury Severity</label>
+
+        <select id="v_injury">
+
+          <option>None</option>
+          <option>Minor</option>
+          <option>Moderate</option>
+          <option>Critical</option>
+
+        </select>
+
+      </div>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Sheltered In (Camp)</label><select id="v_camp"><option>Camp #1 — Patna</option><option>Camp #3 — Kutch</option><option>Camp #5 — Guwahati</option><option>Not Sheltered</option></select></div>
-      <div class="form-group"><label>Missing Status</label><select id="v_missing"><option>Located</option><option>Missing</option><option>Deceased</option></select></div>
+
+      <div class="form-group">
+
+        <label>Camp ID</label>
+
+        <input
+          type="text"
+          id="v_camp"
+          placeholder="Enter Camp ID"
+        >
+
+      </div>
+
     </div>
+
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('victimModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addVictim()">Register Victim</button>
+
+      <button
+        class="btn btn-outline"
+        onclick="closeModal('victimModal')"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        onclick="addVictim()"
+      >
+        Register Victim
+      </button>
+
     </div>
+
   </div>
+
 </div>
 
 <div class="toast" id="global-toast"></div>
+
 <script src="shared.js"></script>
+
 <script>
+
 const auth = requireAuth('victims');
-if (!auth) { } else {
-  document.getElementById('sidebarRoot').innerHTML = buildSidebar('victims');
-  document.getElementById('topbarRoot').innerHTML = buildTopbar('Victims', 'Registry');
+
+if (!auth) {
+
+} else {
+
+  document.getElementById('sidebarRoot').innerHTML =
+    buildSidebar('victims');
+
+  document.getElementById('topbarRoot').innerHTML =
+    buildTopbar('Victims', 'Registry');
 
   if (auth.denied) {
-    document.querySelector('.content').innerHTML = renderAccessDenied('Victim Registry');
+
+    document.querySelector('.content').innerHTML =
+      renderAccessDenied('Victim Registry');
+
   } else {
-    const victims = [
-      { id:'V-001', name:'Ramesh Kumar', age:42, gender:'Male', contact:'9876543210', disaster:'Bihar Floods 2025', injury:'Minor', camp:'Camp #1 — Patna', missing:'Located' },
-      { id:'V-002', name:'Priya Devi', age:34, gender:'Female', contact:'9123456789', disaster:'Cyclone Biparjoy', injury:'Critical', camp:'Camp #3 — Kutch', missing:'Located' },
-      { id:'V-003', name:'Suresh Patel', age:58, gender:'Male', contact:'9988776655', disaster:'Cyclone Biparjoy', injury:'Moderate', camp:'Camp #3 — Kutch', missing:'Located' },
-      { id:'V-004', name:'Anita Singh', age:29, gender:'Female', contact:'9765432100', disaster:'Assam Floods 2025', injury:'None', camp:'Camp #5 — Guwahati', missing:'Located' },
-      { id:'V-005', name:'Mohan Lal', age:67, gender:'Male', contact:'9654321098', disaster:'Bihar Floods 2025', injury:'Critical', camp:'Camp #1 — Patna', missing:'Located' },
-      { id:'V-006', name:'Kavya Reddy', age:22, gender:'Female', contact:'9543210987', disaster:'Joshimath Landslide', injury:'Minor', camp:'Not Sheltered', missing:'Missing' },
-      { id:'V-007', name:'Arjun Nair', age:45, gender:'Male', contact:'9432109876', disaster:'Manipur Earthquake', injury:'Moderate', camp:'Not Sheltered', missing:'Located' },
-      { id:'V-008', name:'Fatima Bibi', age:38, gender:'Female', contact:'9321098765', disaster:'Assam Floods 2025', injury:'None', camp:'Camp #5 — Guwahati', missing:'Located' },
-    ];
+
+    let victims = [];
+
+    async function loadVictims() {
+
+      try {
+
+        const res = await fetch(
+          "http://localhost:5000/api/victims"
+        );
+
+        victims = await res.json();
+
+        renderVictims(victims);
+
+        updateStats();
+
+      } catch(err) {
+
+        console.log(err);
+
+        showToast(
+          "Failed to load victims",
+          "error"
+        );
+      }
+    }
 
     function injBadge(s) {
-      if(s==='Critical') return `<span class="badge badge-danger">Critical</span>`;
-      if(s==='Moderate') return `<span class="badge badge-warning">Moderate</span>`;
-      if(s==='Minor') return `<span class="badge badge-info">Minor</span>`;
-      return `<span class="badge" style="background:rgba(255,255,255,0.05);color:var(--muted)">None</span>`;
+
+      if(s === 'Critical') {
+        return `<span class="badge badge-danger">Critical</span>`;
+      }
+
+      if(s === 'Moderate') {
+        return `<span class="badge badge-warning">Moderate</span>`;
+      }
+
+      if(s === 'Minor') {
+        return `<span class="badge badge-info">Minor</span>`;
+      }
+
+      return `
+        <span
+          class="badge"
+          style="
+            background:rgba(255,255,255,0.05);
+            color:var(--muted)
+          "
+        >
+          None
+        </span>
+      `;
     }
+
     function renderVictims(data) {
-      const tb = document.getElementById('victimBody');
-      if(!data.length){ tb.innerHTML=`<tr><td colspan=9><div class="empty-state"><div class="ei">👤</div><p>No victims found</p></div></td></tr>`; return; }
-      tb.innerHTML = data.map((v,i) => `
-        <tr style="animation:fadeUp 0.3s ${i*0.06}s both">
-          <td><strong>#${v.id}</strong></td>
-          <td><strong>${v.name}</strong></td>
-          <td>${v.age}</td>
-          <td>${v.gender}</td>
-          <td style="font-family:'JetBrains Mono',monospace;font-size:0.78rem">${v.contact}</td>
-          <td><span class="badge badge-cyan" style="font-size:0.62rem">${v.disaster.split(' ')[0]}…</span></td>
-          <td>${injBadge(v.injury)}</td>
-          <td style="font-size:0.78rem">${v.camp}</td>
-          <td>
-            <button class="btn btn-outline btn-sm">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="removeV('${v.id}')">✕</button>
+
+      const tb =
+        document.getElementById('victimBody');
+
+      if(!data.length){
+
+        tb.innerHTML = `
+        <tr>
+          <td colspan=9>
+            <div class="empty-state">
+              <div class="ei">👤</div>
+              <p>No victims found</p>
+            </div>
           </td>
-        </tr>`).join('');
+        </tr>
+        `;
+
+        return;
+      }
+
+      tb.innerHTML = data.map((v,i)=>`
+
+        <tr style="animation:fadeUp 0.3s ${i*0.06}s both">
+
+          <td>
+            <strong>#${v.victim_id}</strong>
+          </td>
+
+          <td>
+            <strong>${v.name}</strong>
+          </td>
+
+          <td>${v.age}</td>
+
+          <td>${v.gender}</td>
+
+          <td
+            style="
+              font-family:'JetBrains Mono',monospace;
+              font-size:0.78rem
+            "
+          >
+            ${v.phone}
+          </td>
+
+          <td>
+
+            <span
+              class="badge badge-cyan"
+              style="font-size:0.62rem"
+            >
+              ${v.disaster_name || 'N/A'}
+            </span>
+
+          </td>
+
+          <td>
+            ${injBadge(v.injury_status)}
+          </td>
+
+          <td style="font-size:0.78rem">
+            ${v.camp_name || 'Not Sheltered'}
+          </td>
+
+          <td>
+
+            <button
+              class="btn btn-outline btn-sm"
+            >
+              Edit
+            </button>
+
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="removeV('${v.victim_id}')"
+            >
+              ✕
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
     }
-    renderVictims(victims);
+
     window.filterVictims = function() {
-      const q=document.getElementById('searchInput').value.toLowerCase();
-      const inj=document.getElementById('injFilter').value;
-      let data=victims.filter(v=>JSON.stringify(v).toLowerCase().includes(q));
-      if(inj) data=data.filter(v=>v.injury===inj);
+
+      const q =
+        document.getElementById('searchInput')
+        .value.toLowerCase();
+
+      const inj =
+        document.getElementById('injFilter')
+        .value;
+
+      let data =
+        victims.filter(v =>
+          JSON.stringify(v)
+          .toLowerCase()
+          .includes(q)
+        );
+
+      if(inj){
+
+        data =
+          data.filter(v =>
+            v.injury_status === inj
+          );
+      }
+
       renderVictims(data);
     };
-    window.addVictim = function() {
-      const id=document.getElementById('v_id').value.trim();
-      const name=document.getElementById('v_name').value.trim();
-      if(!id||!name){ showToast('Fill required fields','error'); return; }
-      victims.unshift({ id,name,age:document.getElementById('v_age').value,gender:document.getElementById('v_gender').value,contact:document.getElementById('v_contact').value,disaster:document.getElementById('v_disaster').value,injury:document.getElementById('v_injury').value,camp:document.getElementById('v_camp').value,missing:document.getElementById('v_missing').value });
-      renderVictims(victims); closeModal('victimModal');
-      showToast('Victim registered ✓'); logAudit('ADD_VICTIM',`Registered ${name}`);
+
+    window.addVictim = async function() {
+
+      const id =
+        document.getElementById('v_id')
+        .value.trim();
+
+      const name =
+        document.getElementById('v_name')
+        .value.trim();
+
+      if(!id || !name){
+
+        showToast(
+          'Fill required fields',
+          'error'
+        );
+
+        return;
+      }
+
+      const data = {
+
+        victim_id: id,
+
+        name: name,
+
+        age:
+          parseInt(
+            document.getElementById('v_age').value
+          ) || 0,
+
+        gender:
+          document.getElementById('v_gender').value,
+
+        phone:
+          document.getElementById('v_contact').value,
+
+        status:
+          document.getElementById('v_status').value,
+
+        injury_status:
+          document.getElementById('v_injury').value,
+
+        disaster_id:
+          parseInt(
+            document.getElementById('v_disaster').value
+          ) || null,
+
+        camp_id:
+          document.getElementById('v_camp').value || null
+      };
+
+      try {
+
+        const res = await fetch(
+          "http://localhost:5000/api/victims",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":"application/json"
+            },
+
+            body: JSON.stringify(data)
+          }
+        );
+
+        const result = await res.json();
+
+        if(result.success){
+
+          closeModal('victimModal');
+
+          showToast(
+            'Victim registered ✓'
+          );
+
+          loadVictims();
+
+          logAudit(
+            'ADD_VICTIM',
+            `Registered ${name}`
+          );
+        }
+
+      } catch(err) {
+
+        console.log(err);
+
+        showToast(
+          'Server error',
+          'error'
+        );
+      }
     };
-    window.removeV = function(id) {
-      const i=victims.findIndex(v=>v.id===id); if(i>-1){ victims.splice(i,1); renderVictims(victims); showToast('Removed','error'); logAudit('DELETE_VICTIM',`Removed ${id}`); }
+
+    window.removeV = function(id){
+
+      const i =
+        victims.findIndex(
+          v => v.victim_id === id
+        );
+
+      if(i > -1){
+
+        victims.splice(i,1);
+
+        renderVictims(victims);
+
+        showToast(
+          'Removed',
+          'error'
+        );
+      }
     };
-    window.exportData = function() { showToast('Exporting records ✓'); };
+
+    window.exportData = function(){
+
+      showToast(
+        'Exporting records ✓'
+      );
+    };
+
+    function updateStats(){
+
+      animateCount(
+        document.getElementById('c1'),
+        victims.length
+      );
+
+      animateCount(
+        document.getElementById('c2'),
+        victims.filter(
+          v => v.camp_id !== null
+        ).length
+      );
+
+      animateCount(
+        document.getElementById('c3'),
+        victims.filter(
+          v => v.injury_status === 'Critical'
+        ).length
+      );
+
+      animateCount(
+        document.getElementById('c4'),
+        victims.filter(
+          v => v.status === 'Missing'
+        ).length
+      );
+    }
 
     window.addEventListener('load',()=>{
-      animateCount(document.getElementById('c1'),victims.length);
-      animateCount(document.getElementById('c2'),victims.filter(v=>v.camp!=='Not Sheltered').length);
-      animateCount(document.getElementById('c3'),victims.filter(v=>v.injury==='Critical').length);
-      animateCount(document.getElementById('c4'),victims.filter(v=>v.missing==='Missing').length);
+
+      loadVictims();
+
     });
+
   }
 }
+
 </script>
+
 </body>
 </html>

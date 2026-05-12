@@ -188,7 +188,102 @@ app.post("/api/resources", (req, res) => {
     }
   );
 });
+/* ---------------- GET ALL VICTIMS ---------------- */
+app.get("/api/victims", (req, res) => {
 
+  const sql = `
+    SELECT
+      v.*,
+      d.name AS disaster_name,
+      rc.name AS camp_name
+    FROM victims v
+
+    LEFT JOIN disasters d
+      ON v.disaster_id = d.id
+
+    LEFT JOIN relief_camps rc
+      ON v.camp_id = rc.camp_id
+
+    ORDER BY v.victim_id DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+      return res.status(500).json(err);
+    }
+
+    res.json(result);
+  });
+});
+
+
+/* ---------------- ADD VICTIM ---------------- */
+app.post("/api/victims", (req, res) => {
+
+  const {
+    victim_id,
+    name,
+    age,
+    gender,
+    phone,
+    status,
+    injury_status,
+    disaster_id,
+    camp_id
+  } = req.body;
+
+  if (!victim_id || !name) {
+
+    return res.status(400).json({
+      error: "Victim ID and Name required"
+    });
+  }
+
+  const sql = `
+    INSERT INTO victims
+    (
+      victim_id,
+      name,
+      age,
+      gender,
+      phone,
+      status,
+      injury_status,
+      disaster_id,
+      camp_id
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      victim_id,
+      name,
+      age,
+      gender,
+      phone,
+      status,
+      injury_status,
+      disaster_id,
+      camp_id
+    ],
+    (err, result) => {
+
+      if (err) {
+
+        console.log(err);
+
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true
+      });
+    }
+  );
+});
 
 
 /* ---------------- START SERVER ---------------- */

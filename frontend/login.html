@@ -205,15 +205,12 @@ input::placeholder { color: var(--muted); }
           <span class="ri">🏢</span>
           <div><div class="rn">Agency Officer</div><div class="ra">Resources & volunteers</div></div>
         </div>
-        <div class="role-item" onclick="selectRole('volunteer','🤝','Volunteer Supervisor')" id="role-volunteer">
-          <span class="ri">🤝</span>
-          <div><div class="rn">Volunteer Supervisor</div><div class="ra">Volunteer management</div></div>
-        </div>
+        
       </div>
     </div>
     <div class="left-footer">
       🔒 All access is monitored and logged<br>
-      NDMIS v3.0 · Ministry of Home Affairs
+      © 2026 LIFELINE-Disaster Management Authority
     </div>
   </div>
 
@@ -239,7 +236,7 @@ input::placeholder { color: var(--muted); }
       <label>Employee ID / User Code</label>
       <div class="inp-wrap">
         <span class="inp-icon">🪪</span>
-        <input type="text" id="uid" placeholder="e.g. NDMA-2024-0183">
+        <input type="text" id="uid" placeholder="e.g. LIFELINE-2026-0183">
       </div>
     </div>
 
@@ -260,8 +257,8 @@ input::placeholder { color: var(--muted); }
 
     <div class="demo-creds">
       <strong>⚡ QUICK DEMO ACCESS (click to fill)</strong>
-      <div class="demo-item" onclick="fillDemo('admin','NDMA-ADMIN-001','admin123')">
-        <span>🛡️</span> <span>admin</span> · NDMA-ADMIN-001 / admin123
+      <div class="demo-item" onclick="fillDemo('admin','LIFELINE-ADMIN-001','admin123')">
+        <span>🛡️</span> <span>admin</span> · LIFELINE-ADMIN-001 / admin123
       </div>
       <div class="demo-item" onclick="fillDemo('coordinator','DC-BH-2024-042','coord123')">
         <span>📋</span> <span>coordinator</span> · DC-BH-2024-042 / coord123
@@ -269,9 +266,7 @@ input::placeholder { color: var(--muted); }
       <div class="demo-item" onclick="fillDemo('agency','AG-OFF-2024-018','agency123')">
         <span>🏢</span> <span>agency</span> · AG-OFF-2024-018 / agency123
       </div>
-      <div class="demo-item" onclick="fillDemo('volunteer','VS-2024-033','vol123')">
-        <span>🤝</span> <span>volunteer</span> · VS-2024-033 / vol123
-      </div>
+      
     </div>
   </div>
 </div>
@@ -282,7 +277,7 @@ const roleNames = {
   admin: { label:'System Administrator', icon:'🛡️', name:'Admin Officer' },
   coordinator: { label:'District Coordinator', icon:'📋', name:'District Officer' },
   agency: { label:'Agency Officer', icon:'🏢', name:'Agency Officer' },
-  volunteer: { label:'Volunteer Supervisor', icon:'🤝', name:'Vol. Supervisor' },
+  
 };
 
 function selectRole(role, icon, label) {
