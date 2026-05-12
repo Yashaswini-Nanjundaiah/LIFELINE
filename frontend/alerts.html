@@ -5,47 +5,114 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alerts — LIFELINE</title>
 <link rel="stylesheet" href="shared.css">
+
 <style>
 .alert-card {
   background: var(--card-bg);
   border:1px solid var(--border);
-  border-radius:3px;padding:18px 22px;
+  border-radius:3px;
+  padding:18px 22px;
   margin-bottom:12px;
   animation:fadeInUp 0.4s ease both;
   transition:all 0.25s;
   position:relative;
   overflow:hidden;
 }
+
 .alert-card::before {
-  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
 }
+
 .alert-card.red::before{ background:var(--red); }
 .alert-card.orange::before{ background:var(--saffron); }
 .alert-card.yellow::before{ background:var(--gold); }
 .alert-card.green::before{ background:var(--green); }
-.alert-card:hover{ transform:translateX(3px);box-shadow:0 4px 20px rgba(0,0,0,0.3); }
-.alert-card .alert-head{ display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px; }
-.alert-card h4{ font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;color:var(--white); }
-.alert-card .alert-body{ font-size:0.83rem;color:var(--text);line-height:1.5;margin-bottom:10px; }
-.alert-card .alert-footer{ display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--muted); }
-.alert-card .alert-footer .a-tags{ display:flex;gap:6px; }
-.pulse-red{ animation:pulseRed 1.5s infinite; }
-@keyframes pulseRed{ 0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,0.4);}50%{box-shadow:0 0 0 8px rgba(229,62,62,0);} }
 
-.filter-tabs{ display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap; }
-.filter-tab{
-  padding:6px 16px;border-radius:2px;border:1px solid var(--border);
-  background:transparent;color:var(--muted);font-size:0.78rem;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;letter-spacing:0.5px;transition:all 0.2s;
+.alert-card:hover{
+  transform:translateX(3px);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
-.filter-tab:hover{ border-color:var(--saffron);color:var(--saffron); }
-.filter-tab.active-tab{ background:rgba(255,107,0,0.15);border-color:var(--saffron);color:var(--saffron); }
+
+.alert-card .alert-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.alert-card h4{
+  font-family:'Rajdhani',sans-serif;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--white);
+}
+
+.alert-card .alert-body{
+  font-size:0.83rem;
+  color:var(--text);
+  line-height:1.5;
+  margin-bottom:10px;
+}
+
+.alert-card .alert-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:0.72rem;
+  color:var(--muted);
+}
+
+.alert-card .alert-footer .a-tags{
+  display:flex;
+  gap:6px;
+}
+
+.filter-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+
+.filter-tab{
+  padding:6px 16px;
+  border-radius:2px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-size:0.78rem;
+  cursor:pointer;
+  font-family:'Rajdhani',sans-serif;
+  letter-spacing:0.5px;
+  transition:all 0.2s;
+}
+
+.filter-tab:hover{
+  border-color:var(--saffron);
+  color:var(--saffron);
+}
+
+.filter-tab.active-tab{
+  background:rgba(255,107,0,0.15);
+  border-color:var(--saffron);
+  color:var(--saffron);
+}
 </style>
 </head>
+
 <body>
+
 <div id="sidebarRoot"></div>
+
 <div class="main">
+
   <div id="topbarRoot"></div>
+
   <div class="content">
 
     <div class="page-header">
@@ -55,53 +122,116 @@
     </div>
 
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Alerts</div><div class="stat-val" id="c1">0</div><div class="stat-sub">All recorded</div></div>
-      <div class="stat-card"><div class="stat-label">Red Alerts</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Immediate action</div></div>
-      <div class="stat-card"><div class="stat-label">Orange Alerts</div><div class="stat-val" id="c3">0</div><div class="stat-sub">High caution</div></div>
-      <div class="stat-card"><div class="stat-label">Alerts Today</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Last 24 hours</div></div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Alerts</div>
+        <div class="stat-val" id="c1">0</div>
+        <div class="stat-sub">All recorded</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Red Alerts</div>
+        <div class="stat-val" id="c2">0</div>
+        <div class="stat-sub">Immediate action</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Orange Alerts</div>
+        <div class="stat-val" id="c3">0</div>
+        <div class="stat-sub">High caution</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Alerts Today</div>
+        <div class="stat-val" id="c4">0</div>
+        <div class="stat-sub">Last 24 hours</div>
+      </div>
+
     </div>
 
     <div class="two-col">
-      <!-- Alert list -->
+
       <div style="grid-column:1/3">
+
         <div class="table-card">
+
           <div class="table-card-header">
+
             <h3>🚨 Active Alerts</h3>
+
             <div class="actions">
-              <button class="btn btn-primary btn-sm" onclick="openModal('alertModal')">+ Issue Alert</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('alertModal')">
+                + Issue Alert
+              </button>
             </div>
+
           </div>
+
           <div style="padding:14px 20px">
-            <div class="filter-tabs" id="filterTabs">
-              <button class="filter-tab active-tab" onclick="setFilter('All',this)">All Alerts</button>
-              <button class="filter-tab" onclick="setFilter('Red',this)">🔴 Red</button>
-              <button class="filter-tab" onclick="setFilter('Orange',this)">🟠 Orange</button>
-              <button class="filter-tab" onclick="setFilter('Yellow',this)">🟡 Yellow</button>
-              <button class="filter-tab" onclick="setFilter('Green',this)">🟢 Green</button>
+
+            <div class="filter-tabs">
+
+              <button class="filter-tab active-tab"
+                onclick="setFilter('All',this)">
+                All Alerts
+              </button>
+
+              <button class="filter-tab"
+                onclick="setFilter('Red',this)">
+                🔴 Red
+              </button>
+
+              <button class="filter-tab"
+                onclick="setFilter('Orange',this)">
+                🟠 Orange
+              </button>
+
+              <button class="filter-tab"
+                onclick="setFilter('Yellow',this)">
+                🟡 Yellow
+              </button>
+
+              <button class="filter-tab"
+                onclick="setFilter('Green',this)">
+                🟢 Green
+              </button>
+
             </div>
+
             <div id="alertList"></div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
   </div>
+
 </div>
 
-<!-- Issue Alert Modal -->
+<!-- MODAL -->
+
 <div class="modal-overlay" id="alertModal">
+
   <div class="modal">
+
     <div class="modal-header">
       <h3>🚨 Issue New Alert</h3>
-      <button class="modal-close" onclick="closeModal('alertModal')">✕</button>
+
+      <button class="modal-close"
+        onclick="closeModal('alertModal')">
+        ✕
+      </button>
     </div>
+
     <div class="form-row">
-      <div class="form-group">
-        <label>Alert ID</label>
-        <input type="text" id="al_id" placeholder="e.g. ALT-2025-021">
-      </div>
+
       <div class="form-group">
         <label>Alert Level</label>
+
         <select id="al_level">
           <option value="Red">🔴 Red — Extreme</option>
           <option value="Orange">🟠 Orange — High</option>
@@ -109,123 +239,383 @@
           <option value="Green">🟢 Green — Advisory</option>
         </select>
       </div>
-    </div>
-    <div class="form-row">
+
       <div class="form-group">
-        <label>Alert Title</label>
-        <input type="text" id="al_title" placeholder="e.g. Cyclone Warning — East Coast">
+        <label>Associated Disaster ID</label>
+
+        <input type="number"
+          id="al_disaster"
+          placeholder="Enter disaster ID">
       </div>
-      <div class="form-group">
-        <label>Associated Disaster</label>
-        <select id="al_dis">
-          <option>Cyclone Biparjoy</option><option>Bihar Floods 2025</option>
-          <option>Assam Floods 2025</option><option>Joshimath Landslide</option><option>General</option>
-        </select>
-      </div>
+
     </div>
+
+    <div class="form-group">
+      <label>Alert Title</label>
+
+      <input type="text"
+        id="al_title"
+        placeholder="Alert title">
+    </div>
+
     <div class="form-group">
       <label>Message / Description</label>
-      <textarea id="al_msg" placeholder="Detailed alert message to be broadcast…"></textarea>
+
+      <textarea id="al_msg"
+        placeholder="Detailed alert message"></textarea>
     </div>
+
     <div class="form-row">
+
       <div class="form-group">
-        <label>Target District / Region</label>
-        <input type="text" id="al_region" placeholder="e.g. All coastal districts of Odisha">
+        <label>Region</label>
+
+        <input type="text"
+          id="al_region"
+          placeholder="Affected area">
       </div>
+
       <div class="form-group">
         <label>Issued By</label>
-        <input type="text" id="al_by" placeholder="Issuing authority">
+
+        <input type="text"
+          id="al_by"
+          placeholder="Authority">
       </div>
+
     </div>
+
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('alertModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="issueAlert()">Issue Alert</button>
+
+      <button class="btn btn-outline"
+        onclick="closeModal('alertModal')">
+        Cancel
+      </button>
+
+      <button class="btn btn-primary"
+        onclick="issueAlert()">
+        Issue Alert
+      </button>
+
     </div>
+
   </div>
+
 </div>
 
 <div class="toast" id="global-toast"></div>
+
 <script src="shared.js"></script>
+
 <script>
-document.getElementById('sidebarRoot').innerHTML = buildSidebar('alerts');
-document.getElementById('topbarRoot').innerHTML = buildTopbar('Alerts', 'Alert Centre');
 
-const alerts = [
-  { id:'ALT-001', level:'Red', title:'Cyclone Warning — Gujarat Coast', disaster:'Cyclone Biparjoy', msg:'Severe cyclonic storm approaching Gujarat coastline. Evacuation ordered for all coastal villages within 5km of shoreline. All relief agencies to be on highest alert.', region:'Kutch, Jamnagar, Porbandar', by:'IMD / NDMA', time:'Today, 09:42 AM', today:true },
-  { id:'ALT-002', level:'Red', title:'Flash Flood — Bihar Embankments', disaster:'Bihar Floods 2025', msg:'Multiple embankment breaches reported in Gopalganj and Muzaffarpur districts. Immediate evacuation of low-lying areas. Army and NDRF teams deployed.', region:'Gopalganj, Muzaffarpur, Sitamarhi', by:'Bihar DM / NDMA', time:'Today, 11:15 AM', today:true },
-  { id:'ALT-003', level:'Orange', title:'Heavy Rainfall Alert — Northeast', disaster:'Assam Floods 2025', msg:'IMD forecast indicates extremely heavy rainfall over Assam, Meghalaya and Arunachal Pradesh for next 48 hours. All district administrations to activate flood preparedness protocol.', region:'All NE States', by:'IMD', time:'Today, 08:00 AM', today:true },
-  { id:'ALT-004', level:'Red', title:'Landslide Risk — Chamoli Dist.', disaster:'Joshimath Landslide', msg:'NDMA sensors detect high subsidence activity in Chamoli and Rudraprayag districts. NH-58 closed. Tourism activities halted.', region:'Chamoli, Rudraprayag', by:'Uttarakhand DM', time:'Yesterday, 06:30 PM', today:false },
-  { id:'ALT-005', level:'Yellow', title:'Heat Wave Advisory — Rajasthan', disaster:'Rajasthan Drought', msg:'Temperature expected to exceed 47°C in Barmer, Jaisalmer and Bikaner districts. Public advised to stay indoors between 11AM–4PM. Drinking water points activated.', region:'Barmer, Jaisalmer, Bikaner', by:'Rajasthan DM', time:'2 days ago', today:false },
-  { id:'ALT-006', level:'Green', title:'All Clear — Manipur Earthquake Zone', disaster:'Manipur Earthquake', msg:'Aftershock activity has subsided. All major infrastructure declared safe by NDMA survey teams. Relief operations continue.', region:'Imphal East & West', by:'Manipur DM', time:'3 days ago', today:false },
-];
+const auth = requireAuth('alerts');
 
-let currentFilter='All';
-function setFilter(f, el){
-  currentFilter=f;
-  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active-tab'));
-  el.classList.add('active-tab');
-  renderAlerts();
-}
+if(!auth){
 
-function levelColor(l){ return {Red:'red',Orange:'orange',Yellow:'yellow',Green:'green'}[l]||'orange'; }
-function levelBadge(l){
-  const m={Red:'badge-danger',Orange:'badge-warning',Yellow:'badge-warning',Green:'badge-active'};
-  const icons={Red:'🔴',Orange:'🟠',Yellow:'🟡',Green:'🟢'};
-  return `<span class="badge ${m[l]}">${icons[l]} ${l} Alert</span>`;
-}
+}else{
 
-function renderAlerts(){
-  const d=currentFilter==='All'?alerts:alerts.filter(a=>a.level===currentFilter);
-  const el=document.getElementById('alertList');
-  if(!d.length){ el.innerHTML=`<div class="empty-state"><div class="empty-icon">✅</div><p>No alerts for selected level</p></div>`; return; }
-  el.innerHTML=d.map((a,i)=>`
-    <div class="alert-card ${levelColor(a.level)}" style="animation-delay:${i*0.08}s${a.level==='Red'&&a.today?' pulse-red':''}">
-      <div class="alert-head">
-        <div>
-          <h4>${a.today?'<span style="color:var(--red);font-size:0.7rem;letter-spacing:1px">● LIVE &nbsp;</span>':''}${a.title}</h4>
-          <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">${a.id} &nbsp;|&nbsp; ${a.time}</div>
+  document.getElementById('sidebarRoot').innerHTML =
+    buildSidebar('alerts');
+
+  document.getElementById('topbarRoot').innerHTML =
+    buildTopbar('Alerts','Alert Centre');
+
+  let alerts = [];
+
+  let currentFilter = 'All';
+
+  async function loadAlerts(){
+
+    try{
+
+      const res = await fetch(
+        "http://localhost:5000/api/alerts"
+      );
+
+      alerts = await res.json();
+
+      renderAlerts();
+
+      updateStats();
+
+    }catch(err){
+
+      console.log(err);
+
+      showToast(
+        "Failed to load alerts",
+        "error"
+      );
+    }
+  }
+
+  function levelColor(l){
+
+    return {
+      Red:'red',
+      Orange:'orange',
+      Yellow:'yellow',
+      Green:'green'
+    }[l] || 'orange';
+  }
+
+  function levelBadge(l){
+
+    const m = {
+      Red:'badge-danger',
+      Orange:'badge-warning',
+      Yellow:'badge-warning',
+      Green:'badge-active'
+    };
+
+    const icons = {
+      Red:'🔴',
+      Orange:'🟠',
+      Yellow:'🟡',
+      Green:'🟢'
+    };
+
+    return `
+      <span class="badge ${m[l]}">
+        ${icons[l]} ${l} Alert
+      </span>
+    `;
+  }
+
+  function renderAlerts(){
+
+    const data =
+      currentFilter === 'All'
+      ? alerts
+      : alerts.filter(a => a.severity === currentFilter);
+
+    const el =
+      document.getElementById('alertList');
+
+    if(!data.length){
+
+      el.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">✅</div>
+          <p>No alerts found</p>
         </div>
-        <div>${levelBadge(a.level)}</div>
+      `;
+
+      return;
+    }
+
+    el.innerHTML = data.map((a,i)=>`
+
+      <div class="alert-card ${levelColor(a.severity)}"
+        style="animation-delay:${i*0.08}s">
+
+        <div class="alert-head">
+
+          <div>
+
+            <h4>${a.title}</h4>
+
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">
+
+              Alert #${a.alert_id}
+              &nbsp;|&nbsp;
+              ${new Date(a.issued_at).toLocaleString()}
+
+            </div>
+
+          </div>
+
+          <div>
+            ${levelBadge(a.severity)}
+          </div>
+
+        </div>
+
+        <div class="alert-body">
+          ${a.message}
+        </div>
+
+        <div class="alert-footer">
+
+          <div class="a-tags">
+
+            <span class="badge badge-info"
+              style="font-size:0.65rem">
+
+              📍 ${a.location}
+
+            </span>
+
+            <span class="badge"
+              style="background:rgba(255,255,255,0.05);color:var(--muted);font-size:0.65rem">
+
+              By: ${a.issued_by}
+
+            </span>
+
+          </div>
+
+          <div style="display:flex;gap:8px">
+
+            <button class="btn btn-danger btn-sm"
+              onclick="removeAlert(${a.alert_id})">
+
+              Resolve
+
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
-      <div class="alert-body">${a.msg}</div>
-      <div class="alert-footer">
-        <div class="a-tags">
-          <span class="badge badge-info" style="font-size:0.65rem">📍 ${a.region.split(',')[0]}…</span>
-          <span class="badge" style="background:rgba(255,255,255,0.05);color:var(--muted);font-size:0.65rem">By: ${a.by}</span>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-outline btn-sm">Acknowledge</button>
-          <button class="btn btn-danger btn-sm" onclick="removeAlert('${a.id}')">Resolve</button>
-        </div>
-      </div>
-    </div>`).join('');
-}
-renderAlerts();
 
-function issueAlert(){
-  const id=document.getElementById('al_id').value.trim();
-  const title=document.getElementById('al_title').value.trim();
-  if(!id||!title){ showToast('Fill required fields','error'); return; }
-  alerts.unshift({
-    id,level:document.getElementById('al_level').value,
-    title,disaster:document.getElementById('al_dis').value,
-    msg:document.getElementById('al_msg').value,
-    region:document.getElementById('al_region').value,
-    by:document.getElementById('al_by').value,
-    time:'Just now',today:true
+    `).join('');
+  }
+
+  window.setFilter = function(f, el){
+
+    currentFilter = f;
+
+    document.querySelectorAll('.filter-tab')
+      .forEach(t=>t.classList.remove('active-tab'));
+
+    el.classList.add('active-tab');
+
+    renderAlerts();
+  };
+
+  window.issueAlert = async function(){
+
+    const title =
+      document.getElementById('al_title')
+      .value.trim();
+
+    const message =
+      document.getElementById('al_msg')
+      .value.trim();
+
+    if(!title || !message){
+
+      showToast(
+        'Fill required fields',
+        'error'
+      );
+
+      return;
+    }
+
+    const data = {
+
+      title: title,
+
+      message: message,
+
+      disaster_id:
+        document.getElementById('al_disaster').value,
+
+      severity:
+        document.getElementById('al_level').value,
+
+      location:
+        document.getElementById('al_region').value,
+
+      issued_by:
+        document.getElementById('al_by').value
+    };
+
+    try{
+
+      const res = await fetch(
+        "http://localhost:5000/api/alerts",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body: JSON.stringify(data)
+        }
+      );
+
+      const result = await res.json();
+
+      if(result.success){
+
+        closeModal('alertModal');
+
+        showToast(
+          'Alert issued ✓'
+        );
+
+        loadAlerts();
+      }
+
+    }catch(err){
+
+      console.log(err);
+
+      showToast(
+        'Server error',
+        'error'
+      );
+    }
+  };
+
+  window.removeAlert = function(id){
+
+    alerts =
+      alerts.filter(a => a.alert_id !== id);
+
+    renderAlerts();
+
+    showToast('Alert resolved ✓');
+  };
+
+  function updateStats(){
+
+    animateCount(
+      document.getElementById('c1'),
+      alerts.length
+    );
+
+    animateCount(
+      document.getElementById('c2'),
+      alerts.filter(a =>
+        a.severity === 'Red'
+      ).length
+    );
+
+    animateCount(
+      document.getElementById('c3'),
+      alerts.filter(a =>
+        a.severity === 'Orange'
+      ).length
+    );
+
+    const today =
+      new Date().toDateString();
+
+    animateCount(
+      document.getElementById('c4'),
+      alerts.filter(a =>
+        new Date(a.issued_at)
+        .toDateString() === today
+      ).length
+    );
+  }
+
+  window.addEventListener('load',()=>{
+
+    loadAlerts();
+
   });
-  renderAlerts();
-  closeModal('alertModal');
-  showToast('Alert issued and broadcast ✓');
-}
-function removeAlert(id){ const i=alerts.findIndex(a=>a.id===id); if(i>-1){ alerts.splice(i,1); renderAlerts(); showToast('Alert resolved ✓'); } }
 
-window.addEventListener('load',()=>{
-  animateCount(document.getElementById('c1'),alerts.length);
-  animateCount(document.getElementById('c2'),alerts.filter(a=>a.level==='Red').length);
-  animateCount(document.getElementById('c3'),alerts.filter(a=>a.level==='Orange').length);
-  animateCount(document.getElementById('c4'),alerts.filter(a=>a.today).length);
-});
+}
+
 </script>
+
 </body>
 </html>

@@ -285,6 +285,85 @@ app.post("/api/victims", (req, res) => {
   );
 });
 
+/* ---------------- GET ALL ALERTS ---------------- */
+app.get("/api/alerts", (req, res) => {
+
+  const sql = `
+    SELECT
+      a.*,
+      d.name AS disaster_name
+    FROM alerts a
+    LEFT JOIN disasters d
+      ON a.disaster_id = d.id
+    ORDER BY a.alert_id DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+      return res.status(500).json(err);
+    }
+
+    res.json(result);
+  });
+});
+
+
+/* ---------------- ADD ALERT ---------------- */
+app.post("/api/alerts", (req, res) => {
+
+  const {
+    title,
+    message,
+    disaster_id,
+    severity,
+    location,
+    issued_by
+  } = req.body;
+
+  if (!title || !message) {
+
+    return res.status(400).json({
+      error: "Title and Message required"
+    });
+  }
+
+  const sql = `
+    INSERT INTO alerts
+    (
+      title,
+      message,
+      disaster_id,
+      severity,
+      location,
+      issued_by
+    )
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      title,
+      message,
+      disaster_id,
+      severity,
+      location,
+      issued_by
+    ],
+    (err, result) => {
+
+      if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true
+      });
+    }
+  );
+});
 
 /* ---------------- START SERVER ---------------- */
 app.listen(5000, () => {
