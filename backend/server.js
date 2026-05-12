@@ -109,6 +109,88 @@ app.post("/api/relief-camps", (req, res) => {
   );
 });
 
+
+/* ---------------- GET ALL RESOURCES ---------------- */
+app.get("/api/resources", (req, res) => {
+
+  const sql = `
+    SELECT
+      r.*,
+      rc.name AS camp_name
+    FROM resources r
+    LEFT JOIN relief_camps rc
+      ON r.camp_id = rc.camp_id
+    ORDER BY r.resource_id DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+      return res.status(500).json(err);
+    }
+
+    res.json(result);
+  });
+});
+
+/* ---------------- ADD RESOURCE ---------------- */
+app.post("/api/resources", (req, res) => {
+
+  const {
+    resource_id,
+    name,
+    type,
+    quantity,
+    status,
+    camp_id
+  } = req.body;
+
+  if (!resource_id || !name) {
+
+    return res.status(400).json({
+      error: "Resource ID and Name required"
+    });
+  }
+
+  const sql = `
+    INSERT INTO resources
+    (
+      resource_id,
+      name,
+      type,
+      quantity,
+      status,
+      camp_id
+    )
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      resource_id,
+      name,
+      type,
+      quantity,
+      status,
+      camp_id
+    ],
+    (err, result) => {
+
+      if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true
+      });
+    }
+  );
+});
+
+
+
 /* ---------------- START SERVER ---------------- */
 app.listen(5000, () => {
   console.log("Server running on port 5000");
