@@ -4,180 +4,810 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relief Camps — LIFELINE</title>
+
 <link rel="stylesheet" href="shared.css">
+
 <style>
 .camp-card {
-  background:var(--surface2); border:1px solid var(--border); border-radius:12px;
-  padding:20px; transition:all 0.25s; animation:fadeUp 0.4s ease both;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  transition:all 0.25s;
+  animation:fadeUp 0.4s ease both;
   border-left:3px solid var(--cyan);
 }
-.camp-card:hover{ transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.3); border-left-color:var(--amber); }
-.camp-card h4{ font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--white); letter-spacing:1px; margin-bottom:6px; }
-.camp-meta{ font-size:0.75rem; color:var(--muted); margin-bottom:10px; }
-.camp-stat{ display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.8rem; }
-.cap-bar{ height:5px; background:rgba(255,255,255,0.07); border-radius:3px; margin-top:8px; overflow:hidden; }
-.cap-fill{ height:100%; border-radius:3px; transition:width 1.2s; background:linear-gradient(90deg,var(--emerald),#00b350); }
-.cap-fill.warn{ background:linear-gradient(90deg,var(--amber),#e09000); }
-.cap-fill.crit{ background:linear-gradient(90deg,var(--coral),#c03050); }
+
+.camp-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  border-left-color:var(--amber);
+}
+
+.camp-card h4{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;
+  color:var(--white);
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.camp-meta{
+  font-size:0.75rem;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.camp-stat{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:4px;
+  font-size:0.8rem;
+}
+
+.cap-bar{
+  height:5px;
+  background:rgba(255,255,255,0.07);
+  border-radius:3px;
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.cap-fill{
+  height:100%;
+  border-radius:3px;
+  transition:width 1.2s;
+  background:linear-gradient(90deg,var(--emerald),#00b350);
+}
+
+.cap-fill.warn{
+  background:linear-gradient(90deg,var(--amber),#e09000);
+}
+
+.cap-fill.crit{
+  background:linear-gradient(90deg,var(--coral),#c03050);
+}
 </style>
 </head>
+
 <body>
+
 <div id="sidebarRoot"></div>
+
 <div class="main">
+
   <div id="topbarRoot"></div>
+
   <div class="content">
+
     <div class="page-header">
       <h2>Relief Camps</h2>
-      <p>Manage relief camps — capacity, resources, victims, and operational status</p>
+      <p>
+        Manage relief camps — capacity, resources,
+        victims, and operational status
+      </p>
       <div class="header-accent"></div>
     </div>
+
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Camps</div><div class="stat-val" id="c1">0</div><div class="stat-sub">Across all zones</div></div>
-      <div class="stat-card"><div class="stat-label">Total Capacity</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Maximum intake</div></div>
-      <div class="stat-card"><div class="stat-label">Current Occupancy</div><div class="stat-val" id="c3">0</div><div class="stat-sub">People sheltered</div></div>
-      <div class="stat-card"><div class="stat-label">At Full Capacity</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Requires expansion</div></div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Camps</div>
+        <div class="stat-val" id="c1">0</div>
+        <div class="stat-sub">Across all zones</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Capacity</div>
+        <div class="stat-val" id="c2">0</div>
+        <div class="stat-sub">Maximum intake</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Current Occupancy</div>
+        <div class="stat-val" id="c3">0</div>
+        <div class="stat-sub">People sheltered</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">At Full Capacity</div>
+        <div class="stat-val" id="c4">0</div>
+        <div class="stat-sub">Requires expansion</div>
+      </div>
+
     </div>
+
     <div class="table-card">
+
       <div class="table-card-header">
+
         <h3>🏕️ CAMP DIRECTORY</h3>
+
         <div class="actions">
-          <button class="btn btn-outline btn-sm" id="toggleView" onclick="toggleView()">⊞ Card View</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('campModal')">+ Add Camp</button>
+
+          <button
+            class="btn btn-outline btn-sm"
+            id="toggleView"
+            onclick="toggleView()"
+          >
+            ⊞ Card View
+          </button>
+
+          <button
+            class="btn btn-primary btn-sm"
+            onclick="openModal('campModal')"
+          >
+            + Add Camp
+          </button>
+
         </div>
       </div>
+
       <div style="padding:14px 22px">
+
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search camps…" oninput="filterCamps()">
-          <select id="statusFilter" onchange="filterCamps()"><option value="">All Status</option><option>Operational</option><option>Full</option><option>Closed</option></select>
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search camps…"
+            oninput="filterCamps()"
+          >
+
+          <select
+            id="statusFilter"
+            onchange="filterCamps()"
+          >
+            <option value="">All Status</option>
+            <option>Operational</option>
+            <option>Full</option>
+            <option>Closed</option>
+          </select>
+
         </div>
       </div>
+
+      <!-- TABLE VIEW -->
+
       <div id="tableView">
+
         <table>
-          <thead><tr><th>Camp ID</th><th>Name</th><th>Location</th><th>Disaster</th><th>Capacity</th><th>Occupancy</th><th>Status</th><th>Coordinator</th><th>Actions</th></tr></thead>
+
+          <thead>
+            <tr>
+              <th>Camp ID</th>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Disaster</th>
+              <th>Capacity</th>
+              <th>Occupancy</th>
+              <th>Status</th>
+              <th>Coordinator</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
           <tbody id="campBody"></tbody>
+
         </table>
       </div>
-      <div id="cardView" style="display:none;padding:16px 22px">
+
+      <!-- CARD VIEW -->
+
+      <div
+        id="cardView"
+        style="display:none;padding:16px 22px"
+      >
         <div class="three-col" id="campCards"></div>
       </div>
+
     </div>
   </div>
 </div>
 
+<!-- MODAL -->
+
 <div class="modal-overlay" id="campModal">
+
   <div class="modal">
-    <div class="modal-header"><h3>🏕️ ADD RELIEF CAMP</h3><button class="modal-close" onclick="closeModal('campModal')">✕</button></div>
-    <div class="form-row">
-      <div class="form-group"><label>Camp ID</label><input type="text" id="c_id" placeholder="e.g. RC-2025-009"></div>
-      <div class="form-group"><label>Camp Name</label><input type="text" id="c_name" placeholder="Name"></div>
+
+    <div class="modal-header">
+
+      <h3>🏕️ ADD RELIEF CAMP</h3>
+
+      <button
+        class="modal-close"
+        onclick="closeModal('campModal')"
+      >
+        ✕
+      </button>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Location</label><input type="text" id="c_loc" placeholder="Full address"></div>
-      <div class="form-group"><label>Associated Disaster</label><select id="c_disaster"><option>Cyclone Biparjoy</option><option>Bihar Floods 2025</option><option>Joshimath Landslide</option><option>Assam Floods 2025</option></select></div>
+
+      <div class="form-group">
+        <label>Camp ID</label>
+
+        <input
+          type="text"
+          id="c_id"
+          placeholder="e.g. RC-2025-009"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Camp Name</label>
+
+        <input
+          type="text"
+          id="c_name"
+          placeholder="Name"
+        >
+      </div>
+
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Capacity</label><input type="number" id="c_cap" placeholder="Max persons"></div>
-      <div class="form-group"><label>Current Occupancy</label><input type="number" id="c_occ" placeholder="Current count"></div>
+
+      <div class="form-group">
+        <label>Location</label>
+
+        <input
+          type="text"
+          id="c_loc"
+          placeholder="Full address"
+        >
+      </div>
+
+      <div class="form-group">
+
+        <label>Associated Disaster</label>
+
+        <select id="c_disaster">
+
+          <option value="1">
+            Cyclone Biparjoy
+          </option>
+
+          <option value="2">
+            Bihar Floods 2025
+          </option>
+
+          <option value="3">
+            Joshimath Landslide
+          </option>
+
+          <option value="4">
+            Assam Floods 2025
+          </option>
+
+        </select>
+
+      </div>
     </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Coordinator Name</label><input type="text" id="c_coord" placeholder="Officer in charge"></div>
-      <div class="form-group"><label>Status</label><select id="c_status"><option>Operational</option><option>Full</option><option>Closed</option></select></div>
+
+      <div class="form-group">
+        <label>Capacity</label>
+
+        <input
+          type="number"
+          id="c_cap"
+          placeholder="Max persons"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Current Occupancy</label>
+
+        <input
+          type="number"
+          id="c_occ"
+          placeholder="Current count"
+        >
+      </div>
+
     </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label>Coordinator Name</label>
+
+        <input
+          type="text"
+          id="c_coord"
+          placeholder="Officer in charge"
+        >
+      </div>
+
+      <div class="form-group">
+
+        <label>Status</label>
+
+        <select id="c_status">
+          <option>Operational</option>
+          <option>Full</option>
+          <option>Closed</option>
+        </select>
+
+      </div>
+    </div>
+
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('campModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addCamp()">Add Camp</button>
+
+      <button
+        class="btn btn-outline"
+        onclick="closeModal('campModal')"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        onclick="addCamp()"
+      >
+        Add Camp
+      </button>
+
     </div>
+
   </div>
 </div>
 
 <div class="toast" id="global-toast"></div>
+
 <script src="shared.js"></script>
+
 <script>
+
 const auth = requireAuth('relief');
-if (!auth) {} else {
-  document.getElementById('sidebarRoot').innerHTML = buildSidebar('relief');
-  document.getElementById('topbarRoot').innerHTML = buildTopbar('Relief Camps', 'Management');
+
+if (!auth) {
+
+} else {
+
+  document.getElementById('sidebarRoot').innerHTML =
+    buildSidebar('relief');
+
+  document.getElementById('topbarRoot').innerHTML =
+    buildTopbar('Relief Camps', 'Management');
 
   if (auth.denied) {
-    document.querySelector('.content').innerHTML = renderAccessDenied('Relief Camps');
-  } else {
-    const camps = [
-      { id:'RC-001', name:'Rajendra Nagar Relief Camp', location:'Patna, Bihar', disaster:'Bihar Floods 2025', capacity:2000, occupancy:1840, status:'Operational', coord:'Suresh Tiwari' },
-      { id:'RC-002', name:'Ganesh Maidan Camp', location:'Patna, Bihar', disaster:'Bihar Floods 2025', capacity:1500, occupancy:1500, status:'Full', coord:'Meena Sharma' },
-      { id:'RC-003', name:'Kutch Relief Centre', location:'Bhuj, Gujarat', disaster:'Cyclone Biparjoy', capacity:3000, occupancy:2840, status:'Operational', coord:'Vijay Patel' },
-      { id:'RC-004', name:'Dwarka Coast Camp', location:'Dwarka, Gujarat', disaster:'Cyclone Biparjoy', capacity:1200, occupancy:980, status:'Operational', coord:'Anita Joshi' },
-      { id:'RC-005', name:'Guwahati North Camp', location:'Guwahati, Assam', disaster:'Assam Floods 2025', capacity:2500, occupancy:2500, status:'Full', coord:'Pranab Das' },
-      { id:'RC-006', name:'Kamrup Relief Hub', location:'Kamrup, Assam', disaster:'Assam Floods 2025', capacity:800, occupancy:620, status:'Operational', coord:'Rupa Bora' },
-      { id:'RC-007', name:'Imphal Temp Shelter', location:'Imphal, Manipur', disaster:'Manipur Earthquake', capacity:500, occupancy:210, status:'Operational', coord:'Ibomcha Singh' },
-    ];
 
-    function capClass(c,o){ const p=o/c; return p>=0.95?'crit':p>=0.75?'warn':''; }
+    document.querySelector('.content').innerHTML =
+      renderAccessDenied('Relief Camps');
+
+  } else {
+
+    let camps = [];
+
+    let cardMode = false;
+
+    async function loadCamps() {
+
+      try {
+
+        const res = await fetch(
+          "http://localhost:5000/api/relief-camps"
+        );
+
+        camps = await res.json();
+
+        renderTable(camps);
+
+        if(cardMode){
+          renderCards(camps);
+        }
+
+        updateStats();
+
+      } catch(err) {
+
+        console.log(err);
+
+        showToast(
+          "Failed to load camps",
+          "error"
+        );
+      }
+    }
+
+    function capClass(c,o){
+
+      const p = o/c;
+
+      return p>=0.95
+        ? 'crit'
+        : p>=0.75
+        ? 'warn'
+        : '';
+    }
 
     function renderTable(data) {
-      document.getElementById('campBody').innerHTML = data.map((c,i) => {
-        const pct = Math.round(c.occupancy/c.capacity*100);
-        return `<tr style="animation:fadeUp 0.3s ${i*0.07}s both">
-          <td><strong>#${c.id}</strong></td><td>${c.name}</td><td>${c.location}</td>
-          <td><span class="badge badge-info" style="font-size:0.62rem">${c.disaster.split(' ')[0]}</span></td>
-          <td>${c.capacity.toLocaleString()}</td>
-          <td>${c.occupancy.toLocaleString()} <small style="color:var(--muted)">(${pct}%)</small></td>
-          <td><span class="badge ${c.status==='Full'?'badge-danger':c.status==='Operational'?'badge-active':'badge-warning'}">${c.status}</span></td>
-          <td>${c.coord}</td>
-          <td><button class="btn btn-outline btn-sm">Edit</button> <button class="btn btn-danger btn-sm" onclick="removeCamp('${c.id}')">✕</button></td>
-        </tr>`;
+
+      document.getElementById('campBody').innerHTML =
+        data.map((c,i) => {
+
+        const pct =
+          Math.round(
+            c.occupancy/c.capacity*100
+          );
+
+        return `
+        <tr style="animation:fadeUp 0.3s ${i*0.07}s both">
+
+          <td>
+            <strong>#${c.camp_id}</strong>
+          </td>
+
+          <td>${c.name}</td>
+
+          <td>${c.location}</td>
+
+          <td>
+            <span
+              class="badge badge-info"
+              style="font-size:0.62rem"
+            >
+              ${(c.disaster_name || '-').split(' ')[0]}
+            </span>
+          </td>
+
+          <td>
+            ${c.capacity.toLocaleString()}
+          </td>
+
+          <td>
+            ${c.occupancy.toLocaleString()}
+
+            <small style="color:var(--muted)">
+              (${pct}%)
+            </small>
+          </td>
+
+          <td>
+
+            <span class="badge ${
+              c.status==='Full'
+              ? 'badge-danger'
+              : c.status==='Operational'
+              ? 'badge-active'
+              : 'badge-warning'
+            }">
+
+              ${c.status}
+
+            </span>
+
+          </td>
+
+          <td>${c.coordinator}</td>
+
+          <td>
+
+            <button class="btn btn-outline btn-sm">
+              Edit
+            </button>
+
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="removeCamp('${c.camp_id}')"
+            >
+              ✕
+            </button>
+
+          </td>
+
+        </tr>
+        `;
+
       }).join('');
     }
 
     function renderCards(data) {
-      document.getElementById('campCards').innerHTML = data.map((c,i) => {
-        const pct=Math.round(c.occupancy/c.capacity*100); const cls=capClass(c.capacity,c.occupancy);
-        return `<div class="camp-card" style="animation-delay:${i*0.08}s">
-          <h4>🏕️ ${c.name}</h4>
-          <div class="camp-meta">📍 ${c.location} &nbsp;|&nbsp; <span class="badge ${c.status==='Full'?'badge-danger':'badge-active'}">${c.status}</span></div>
-          <div class="camp-stat"><span>Capacity</span><strong>${c.capacity.toLocaleString()}</strong></div>
-          <div class="camp-stat"><span>Occupancy</span><strong>${c.occupancy.toLocaleString()}</strong></div>
-          <div class="camp-stat"><span>Coordinator</span><span>${c.coord}</span></div>
-          <div class="cap-bar"><div class="cap-fill ${cls}" data-w="${pct}%" style="width:0"></div></div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;text-align:right">${pct}% full</div>
-        </div>`;
-      }).join('');
-      setTimeout(()=>{ document.querySelectorAll('.cap-fill').forEach(el=>{ el.style.width=el.dataset.w; }); }, 200);
-    }
-    renderTable(camps);
 
-    let cardMode=false;
+      document.getElementById('campCards').innerHTML =
+        data.map((c,i) => {
+
+        const pct =
+          Math.round(
+            c.occupancy/c.capacity*100
+          );
+
+        const cls =
+          capClass(c.capacity,c.occupancy);
+
+        return `
+        <div
+          class="camp-card"
+          style="animation-delay:${i*0.08}s"
+        >
+
+          <h4>🏕️ ${c.name}</h4>
+
+          <div class="camp-meta">
+
+            📍 ${c.location}
+
+            &nbsp;|&nbsp;
+
+            <span class="badge ${
+              c.status==='Full'
+              ? 'badge-danger'
+              : 'badge-active'
+            }">
+
+              ${c.status}
+
+            </span>
+
+          </div>
+
+          <div class="camp-stat">
+            <span>Capacity</span>
+
+            <strong>
+              ${c.capacity.toLocaleString()}
+            </strong>
+          </div>
+
+          <div class="camp-stat">
+            <span>Occupancy</span>
+
+            <strong>
+              ${c.occupancy.toLocaleString()}
+            </strong>
+          </div>
+
+          <div class="camp-stat">
+            <span>Coordinator</span>
+
+            <span>${c.coordinator}</span>
+          </div>
+
+          <div class="cap-bar">
+
+            <div
+              class="cap-fill ${cls}"
+              data-w="${pct}%"
+              style="width:0"
+            ></div>
+
+          </div>
+
+          <div
+            style="
+              font-size:0.7rem;
+              color:var(--muted);
+              margin-top:4px;
+              text-align:right
+            "
+          >
+            ${pct}% full
+          </div>
+
+        </div>
+        `;
+
+      }).join('');
+
+      setTimeout(()=>{
+
+        document
+        .querySelectorAll('.cap-fill')
+        .forEach(el=>{
+
+          el.style.width = el.dataset.w;
+
+        });
+
+      }, 200);
+    }
+
     window.toggleView = function() {
-      cardMode=!cardMode;
-      document.getElementById('tableView').style.display=cardMode?'none':'block';
-      document.getElementById('cardView').style.display=cardMode?'block':'none';
-      document.getElementById('toggleView').textContent=cardMode?'☰ Table View':'⊞ Card View';
-      if(cardMode) renderCards(camps);
+
+      cardMode = !cardMode;
+
+      document.getElementById('tableView').style.display =
+        cardMode ? 'none' : 'block';
+
+      document.getElementById('cardView').style.display =
+        cardMode ? 'block' : 'none';
+
+      document.getElementById('toggleView').textContent =
+        cardMode
+        ? '☰ Table View'
+        : '⊞ Card View';
+
+      if(cardMode){
+        renderCards(camps);
+      }
     };
+
     window.filterCamps = function() {
-      const q=document.getElementById('searchInput').value.toLowerCase();
-      const s=document.getElementById('statusFilter').value;
-      let d=camps.filter(c=>JSON.stringify(c).toLowerCase().includes(q));
-      if(s) d=d.filter(c=>c.status===s);
-      renderTable(d); if(cardMode) renderCards(d);
+
+      const q =
+        document.getElementById('searchInput')
+        .value.toLowerCase();
+
+      const s =
+        document.getElementById('statusFilter').value;
+
+      let d =
+        camps.filter(c =>
+          JSON.stringify(c)
+          .toLowerCase()
+          .includes(q)
+        );
+
+      if(s){
+        d = d.filter(c => c.status===s);
+      }
+
+      renderTable(d);
+
+      if(cardMode){
+        renderCards(d);
+      }
     };
-    window.addCamp = function() {
-      const id=document.getElementById('c_id').value.trim(); const name=document.getElementById('c_name').value.trim();
-      if(!id||!name){ showToast('Fill required fields','error'); return; }
-      camps.unshift({id,name,location:document.getElementById('c_loc').value,disaster:document.getElementById('c_disaster').value,capacity:parseInt(document.getElementById('c_cap').value)||0,occupancy:parseInt(document.getElementById('c_occ').value)||0,status:document.getElementById('c_status').value,coord:document.getElementById('c_coord').value});
-      renderTable(camps); closeModal('campModal'); showToast('Camp added ✓'); logAudit('ADD_CAMP',`Added camp ${name}`);
+
+    window.addCamp = async function() {
+
+      const id =
+        document.getElementById('c_id')
+        .value.trim();
+
+      const name =
+        document.getElementById('c_name')
+        .value.trim();
+
+      if(!id || !name){
+
+        showToast(
+          'Fill required fields',
+          'error'
+        );
+
+        return;
+      }
+
+      const data = {
+
+        camp_id: id,
+
+        name: name,
+
+        location:
+          document.getElementById('c_loc').value,
+
+        disaster_id:
+          parseInt(
+            document.getElementById('c_disaster').value
+          ),
+
+        capacity:
+          parseInt(
+            document.getElementById('c_cap').value
+          ) || 0,
+
+        occupancy:
+          parseInt(
+            document.getElementById('c_occ').value
+          ) || 0,
+
+        status:
+          document.getElementById('c_status').value,
+
+        coordinator:
+          document.getElementById('c_coord').value
+      };
+
+      try {
+
+        const res = await fetch(
+          "http://localhost:5000/api/relief-camps",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":"application/json"
+            },
+
+            body: JSON.stringify(data)
+          }
+        );
+
+        const result = await res.json();
+
+        if(result.success){
+
+          closeModal('campModal');
+
+          showToast('Camp added ✓');
+
+          loadCamps();
+
+          logAudit(
+            'ADD_CAMP',
+            `Added camp ${name}`
+          );
+        }
+
+      } catch(err) {
+
+        console.log(err);
+
+        showToast(
+          'Server error',
+          'error'
+        );
+      }
     };
+
     window.removeCamp = function(id) {
-      const i=camps.findIndex(c=>c.id===id); if(i>-1){ camps.splice(i,1); renderTable(camps); showToast('Removed','error'); }
+
+      const i =
+        camps.findIndex(
+          c => c.camp_id===id
+        );
+
+      if(i>-1){
+
+        camps.splice(i,1);
+
+        renderTable(camps);
+
+        showToast(
+          'Removed',
+          'error'
+        );
+      }
     };
+
+    function updateStats(){
+
+      animateCount(
+        document.getElementById('c1'),
+        camps.length
+      );
+
+      animateCount(
+        document.getElementById('c2'),
+        camps.reduce(
+          (a,c)=>a+c.capacity,
+          0
+        )
+      );
+
+      animateCount(
+        document.getElementById('c3'),
+        camps.reduce(
+          (a,c)=>a+c.occupancy,
+          0
+        )
+      );
+
+      animateCount(
+        document.getElementById('c4'),
+        camps.filter(
+          c=>c.status==='Full'
+        ).length
+      );
+    }
 
     window.addEventListener('load',()=>{
-      animateCount(document.getElementById('c1'),camps.length);
-      animateCount(document.getElementById('c2'),camps.reduce((a,c)=>a+c.capacity,0));
-      animateCount(document.getElementById('c3'),camps.reduce((a,c)=>a+c.occupancy,0));
-      animateCount(document.getElementById('c4'),camps.filter(c=>c.status==='Full').length);
+
+      loadCamps();
+
     });
+
   }
 }
+
 </script>
+
 </body>
 </html>
