@@ -365,6 +365,83 @@ app.post("/api/alerts", (req, res) => {
   );
 });
 
+// ================= AGENCIES =================
+
+// GET all agencies
+app.get("/api/agencies", (req, res) => {
+  db.query("SELECT * FROM agencies", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// ADD agency
+app.post("/api/agencies", (req, res) => {
+  const { agency_id, name, type, contact, location } = req.body;
+
+  const sql = `
+    INSERT INTO agencies
+    (agency_id, name, type, contact, location)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [agency_id, name, type, contact, location],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        res.send("Agency added successfully");
+      }
+    }
+  );
+});
+
+
+// ================= DISASTER_AGENCY =================
+
+// GET mappings
+app.get("/api/disaster-agency", (req, res) => {
+  const sql = `
+    SELECT *
+    FROM disaster_agency
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// ADD mapping
+app.post("/api/disaster-agency", (req, res) => {
+  const { disaster_id, agency_id } = req.body;
+
+  const sql = `
+    INSERT INTO disaster_agency
+    (disaster_id, agency_id)
+    VALUES (?, ?)
+  `;
+
+  db.query(sql, [disaster_id, agency_id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      res.send("Mapping added successfully");
+    }
+  });
+});
 /* ---------------- START SERVER ---------------- */
 app.listen(5000, () => {
   console.log("Server running on port 5000");
