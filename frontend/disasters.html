@@ -3,60 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Disasters</title>
-<link rel="stylesheet" href="style.css">
+<title>Disasters — LIFELINE</title>
+<link rel="stylesheet" href="shared.css">
 </head>
 <body>
+<div id="sidebarRoot"></div>
+<div class="main">
+  <div id="topbarRoot"></div>
+  <div class="content">
+    <div class="page-header">
+      <h2>Disaster Registry</h2>
+      <p>Manage and monitor all active and historical disaster events</p>
+      <div class="header-accent"></div>
+    </div>
 
-<nav class="site-nav">
-<div class="nav-inner">
-<div class="nav-links">
-<a class="nav-item" href="dashboard.html">Dashboard</a>
-<a class="nav-item active" href="disasters.html">Disasters</a>
-<a class="nav-item" href="camps.html">Camps</a>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Disasters</div><div class="stat-val" id="c1">0</div><div class="stat-sub">All recorded</div></div>
+      <div class="stat-card"><div class="stat-label">Active Now</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Requires attention</div></div>
+      <div class="stat-card"><div class="stat-label">Affected People</div><div class="stat-val" id="c3">0</div><div class="stat-sub">Estimated total</div></div>
+      <div class="stat-card"><div class="stat-label">Agencies Deployed</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Across all disasters</div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>🌪️ DISASTER RECORDS</h3>
+        <div class="actions">
+          <button class="btn btn-outline btn-sm" onclick="filterStatus('All')">All</button>
+          <button class="btn btn-outline btn-sm" onclick="filterStatus('Active')">Active</button>
+          <button class="btn btn-outline btn-sm" onclick="filterStatus('Monitoring')">Monitoring</button>
+          <button class="btn btn-primary btn-sm" id="addBtn" onclick="openModal('disasterModal')">+ Add Disaster</button>
+        </div>
+      </div>
+      <div style="padding:14px 22px">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search by name, type, location…" oninput="filterTable('searchInput','disasterTable')">
+          <select onchange="filterByType(this.value)">
+            <option value="">All Types</option>
+            <option>Flood</option><option>Cyclone</option><option>Earthquake</option>
+            <option>Drought</option><option>Landslide</option><option>Fire</option>
+          </select>
+        </div>
+      </div>
+      <table id="disasterTable">
+        <thead>
+          <tr><th>Disaster ID</th><th>Name</th><th>Type</th><th>Date</th><th>Location</th><th>Affected</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="disasterBody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+<div class="modal-overlay" id="disasterModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🌪️ REGISTER NEW DISASTER</h3>
+      <button class="modal-close" onclick="closeModal('disasterModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Disaster ID</label><input type="text" id="d_id" placeholder="e.g. D-2025-011"></div>
+      <div class="form-group"><label>Disaster Name</label><input type="text" id="d_name" placeholder="e.g. Bihar Floods 2025"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label><select id="d_type"><option>Flood</option><option>Cyclone</option><option>Earthquake</option><option>Drought</option><option>Landslide</option><option>Fire</option><option>Tsunami</option></select></div>
+      <div class="form-group"><label>Date of Occurrence</label><input type="date" id="d_date"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Location / District</label><input type="text" id="d_loc" placeholder="e.g. Patna, Bihar"></div>
+      <div class="form-group"><label>Severity</label><select id="d_sev"><option>Low</option><option>Moderate</option><option>High</option><option>Catastrophic</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Estimated Affected</label><input type="number" id="d_aff" placeholder="0"></div>
+      <div class="form-group"><label>Status</label><select id="d_status"><option>Active</option><option>Monitoring</option><option>Contained</option><option>Closed</option></select></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="d_desc" placeholder="Brief description…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('disasterModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addDisaster()">Register Disaster</button>
+    </div>
+  </div>
 </div>
-</nav>
 
-<main class="page-wrap">
-<h1 class="page-heading">Active Disasters</h1>
-
-<div class="card">
-<table class="data-table">
-<thead>
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Type</th>
-<th>Location</th>
-<th>Severity</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody id="disasterTable"></tbody>
-</table>
-</div>
-</main>
-
+<div class="toast" id="global-toast"></div>
+<script src="shared.js"></script>
 <script>
-fetch("http://localhost:5000/api/disasters")
-.then(res => res.json())
-.then(data => {
-let rows = "";
-data.forEach(d => {
-rows += `
-<tr>
-<td>${d.id}</td>
-<td>${d.name}</td>
-<td>${d.type}</td>
-<td>${d.location}</td>
-<td>${d.severity}</td>
-<td>${d.status}</td>
-</tr>`;
-});
-document.getElementById("disasterTable").innerHTML = rows;
-});
-</script>
+const auth = requireAuth('disasters');
 
+if (!auth) {
+  // redirected
+} else {
+
+  document.getElementById('sidebarRoot').innerHTML = buildSidebar('disasters');
+  document.getElementById('topbarRoot').innerHTML = buildTopbar('Disasters', 'Registry');
+
+  if (auth.denied) {
+    document.querySelector('.content').innerHTML = renderAccessDenied('Disaster Registry');
+  } else {
+
+    const isReadOnly = auth.session.role === 'agency' || auth.session.role === 'volunteer';
+    if (isReadOnly) {
+      document.getElementById('addBtn').style.display = "none";
+    }
+
+    let disasters = [];
+
+    /* ---------------- LOAD FROM DB ---------------- */
+    async function loadDisasters() {
+      try {
+        const res = await fetch("http://localhost:5000/api/disasters");
+        disasters = await res.json();
+        renderTable(disasters);
+
+        document.getElementById('c1').innerText = disasters.length;
+        document.getElementById('c2').innerText = disasters.filter(d => d.status === "Active").length;
+        document.getElementById('c3').innerText = disasters.reduce((a, d) => a + (d.affected || 0), 0);
+        document.getElementById('c4').innerText = 47;
+
+      } catch (err) {
+        console.log(err);
+        showToast("Failed to load data", "error");
+      }
+    }
+
+    /* ---------------- RENDER ---------------- */
+    function renderTable(data) {
+      const tb = document.getElementById("disasterBody");
+
+      if (!data.length) {
+        tb.innerHTML = `<tr><td colspan="8">No disasters found</td></tr>`;
+        return;
+      }
+
+      tb.innerHTML = data.map(d => `
+        <tr>
+          <td>#${d.id}</td>
+          <td>${d.name}</td>
+          <td>${d.type}</td>
+          <td>${d.date}</td>
+          <td>${d.location}</td>
+          <td>${d.affected}</td>
+          <td>${d.status}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="viewDisaster(${d.id})">View</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    /* ---------------- ADD TO DB ---------------- */
+    async function addDisaster() {
+
+      const data = {
+        name: document.getElementById('d_name').value,
+        type: document.getElementById('d_type').value,
+        date: document.getElementById('d_date').value,
+        location: document.getElementById('d_loc').value,
+        affected: parseInt(document.getElementById('d_aff').value) || 0,
+        status: document.getElementById('d_status').value
+      };
+
+      if (!data.name || !data.type) {
+        showToast("Fill required fields", "error");
+        return;
+      }
+
+      const res = await fetch("http://localhost:5000/api/disasters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        showToast("Saved to database ✓");
+        closeModal('disasterModal');
+        loadDisasters();
+      } else {
+        showToast("Error saving data", "error");
+      }
+    }
+
+    /* ---------------- VIEW ---------------- */
+    function viewDisaster(id) {
+      const d = disasters.find(x => x.id == id);
+      alert(`${d.name}\n${d.type}\n${d.location}\nAffected: ${d.affected}`);
+    }
+
+    window.addDisaster = addDisaster;
+    window.viewDisaster = viewDisaster;
+
+    loadDisasters();
+  }
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — LIFELINE</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060d1a; --surface: #0c1829; --surface2: #111f35;
+  --cyan: #00c8ff; --cyan-dim: rgba(0,200,255,0.12); --cyan-glow: rgba(0,200,255,0.35);
+  --coral: #ff4d6d; --coral-dim: rgba(255,77,109,0.12);
+  --amber: #ffb347; --emerald: #00e676; --violet: #b388ff;
+  --white: #f0f4ff; --text: #b8cce0; --muted: #607a99;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 600px 500px at 10% 50%, rgba(0,200,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 500px 400px at 90% 50%, rgba(179,136,255,0.07) 0%, transparent 60%);
+}
+
+/* Left panel */
+.login-layout {
+  position: relative; z-index: 10;
+  display: flex; width: 900px; max-width: 98vw;
+  min-height: 580px; border-radius: 20px;
+  border: 1px solid var(--border2); overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  animation: riseIn 0.8s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes riseIn {
+  from { transform: translateY(40px); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
+.left-panel {
+  width: 320px; flex-shrink: 0;
+  background: linear-gradient(160deg, #0c1829, #060d1a);
+  padding: 48px 36px;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.brand { margin-bottom: 40px; }
+.logo-mark {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  box-shadow: 0 0 30px var(--cyan-glow); margin-bottom: 16px;
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 0 20px var(--cyan-glow)} 50%{box-shadow:0 0 40px var(--cyan-glow)} }
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem; color: var(--white); letter-spacing: 3px;
+}
+.brand-sub { font-size: 0.68rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+.brand-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-top: 16px; }
+
+.role-list { flex: 1; }
+.role-list h4 { font-size: 0.65rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+.role-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px; margin-bottom: 6px;
+  border: 1px solid transparent; cursor: pointer; transition: all 0.2s;
+  font-size: 0.82rem; color: var(--muted);
+}
+.role-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+.role-item.selected { background: var(--cyan-dim); border-color: rgba(0,200,255,0.25); color: var(--cyan); }
+.role-item .ri { font-size: 1.1rem; }
+.role-item .rn { font-weight: 600; font-size: 0.82rem; }
+.role-item .ra { font-size: 0.68rem; color: var(--muted); }
+
+.left-footer { font-size: 0.68rem; color: var(--muted); margin-top: 24px; }
+
+/* Right panel */
+.right-panel {
+  flex: 1; background: var(--surface2);
+  padding: 48px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.form-head { margin-bottom: 32px; }
+.form-head h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem; color: var(--white); letter-spacing: 2px;
+}
+.form-head p { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.secure-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 20px;
+  background: var(--cyan-dim); border: 1px solid rgba(0,200,255,0.25);
+  font-size: 0.65rem; color: var(--cyan); letter-spacing: 1.5px; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 14px;
+}
+
+.form-group { margin-bottom: 18px; }
+label {
+  display: block; font-size: 0.68rem; color: var(--cyan); letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 7px; font-weight: 600;
+}
+.inp-wrap { position: relative; }
+.inp-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--muted); pointer-events: none; }
+input[type=text], input[type=password] {
+  width: 100%; padding: 11px 14px 11px 40px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2); border-radius: 10px;
+  color: var(--white); font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+  outline: none; transition: all 0.2s;
+}
+input:focus {
+  border-color: var(--cyan); background: rgba(0,200,255,0.05);
+  box-shadow: 0 0 0 3px var(--cyan-dim);
+}
+input::placeholder { color: var(--muted); }
+
+/* Role selector (hidden, value driven by left panel clicks) */
+.selected-role-display {
+  padding: 11px 14px; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border2); border-radius: 10px;
+  color: var(--muted); font-size: 0.875rem; min-height: 46px;
+  display: flex; align-items: center; gap: 8px;
+}
+.selected-role-display.has-role { color: var(--white); border-color: rgba(0,200,255,0.25); background: var(--cyan-dim); }
+.selected-role-display .sr-icon { font-size: 1.1rem; }
+.selected-role-display .sr-text { font-weight: 600; font-size: 0.875rem; }
+
+.btn-login {
+  width: 100%; padding: 14px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--cyan), #0096cc);
+  color: var(--bg); font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem; font-weight: 400; letter-spacing: 2px;
+  border: none; cursor: pointer; transition: all 0.25s;
+  margin-top: 6px;
+}
+.btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--cyan-glow); }
+.btn-login:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.form-links { display: flex; justify-content: space-between; margin-top: 16px; }
+.form-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.form-links a:hover { color: var(--cyan); }
+
+.error-msg {
+  display: none; background: var(--coral-dim); border: 1px solid rgba(255,77,109,0.3);
+  border-radius: 8px; padding: 10px 14px; font-size: 0.8rem; color: var(--coral);
+  margin-bottom: 16px;
+}
+.error-msg.show { display: block; animation: shake 0.4s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+
+.demo-creds {
+  margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 0.72rem; color: var(--muted);
+}
+.demo-creds strong { color: var(--amber); display: block; margin-bottom: 8px; letter-spacing: 1px; }
+.demo-item {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted);
+  background: rgba(255,255,255,0.03); border-radius: 6px;
+  padding: 6px 10px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+  cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+}
+.demo-item:hover { background: rgba(0,200,255,0.06); border-color: rgba(0,200,255,0.15); color: var(--white); }
+.demo-item span { color: var(--cyan); }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="login-layout">
+  <!-- Left panel — role chooser -->
+  <div class="left-panel">
+    <div>
+      <div class="brand">
+        <div class="logo-mark">⚡</div>
+        <div class="brand-name">LIFELINE</div>
+        <div class="brand-sub">Disaster Management System</div>
+        <div class="brand-desc">Authorized portal for official disaster response personnel. Select your role to proceed.</div>
+      </div>
+      <div class="role-list">
+        <h4>Select Your Role</h4>
+        <div class="role-item" onclick="selectRole('admin','🛡️','System Administrator')" id="role-admin">
+          <span class="ri">🛡️</span>
+          <div><div class="rn">Administrator</div><div class="ra">Full system access</div></div>
+        </div>
+        <div class="role-item" onclick="selectRole('coordinator','📋','District Coordinator')" id="role-coordinator">
+          <span class="ri">📋</span>
+          <div><div class="rn">District Coordinator</div><div class="ra">Disasters, victims, alerts</div></div>
+        </div>
+        <div class="role-item" onclick="selectRole('agency','🏢','Agency Officer')" id="role-agency">
+          <span class="ri">🏢</span>
+          <div><div class="rn">Agency Officer</div><div class="ra">Resources & volunteers</div></div>
+        </div>
+        <div class="role-item" onclick="selectRole('volunteer','🤝','Volunteer Supervisor')" id="role-volunteer">
+          <span class="ri">🤝</span>
+          <div><div class="rn">Volunteer Supervisor</div><div class="ra">Volunteer management</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="left-footer">
+      🔒 All access is monitored and logged<br>
+      NDMIS v3.0 · Ministry of Home Affairs
+    </div>
+  </div>
+
+  <!-- Right panel — credentials -->
+  <div class="right-panel">
+    <div class="form-head">
+      <div class="secure-tag">🔐 Secure Portal</div>
+      <h2>OFFICIAL SIGN IN</h2>
+      <p>Authorized personnel only — use your government credentials</p>
+    </div>
+
+    <div class="error-msg" id="errMsg">Please fill all fields and select a role.</div>
+
+    <div class="form-group">
+      <label>Selected Role</label>
+      <div class="selected-role-display" id="roleDisplay">
+        <span style="font-size:1.1rem">👤</span>
+        <span id="roleText" style="font-size:0.82rem">← Select a role from the left panel</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Employee ID / User Code</label>
+      <div class="inp-wrap">
+        <span class="inp-icon">🪪</span>
+        <input type="text" id="uid" placeholder="e.g. NDMA-2024-0183">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <div class="inp-wrap">
+        <span class="inp-icon">🔒</span>
+        <input type="password" id="pwd" placeholder="Enter your secure password">
+      </div>
+    </div>
+
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">→ PROCEED TO DASHBOARD</button>
+
+    <div class="form-links">
+      <a href="#">Forgot Password?</a>
+      <a href="index.html">← Back to Overview</a>
+    </div>
+
+    <div class="demo-creds">
+      <strong>⚡ QUICK DEMO ACCESS (click to fill)</strong>
+      <div class="demo-item" onclick="fillDemo('admin','NDMA-ADMIN-001','admin123')">
+        <span>🛡️</span> <span>admin</span> · NDMA-ADMIN-001 / admin123
+      </div>
+      <div class="demo-item" onclick="fillDemo('coordinator','DC-BH-2024-042','coord123')">
+        <span>📋</span> <span>coordinator</span> · DC-BH-2024-042 / coord123
+      </div>
+      <div class="demo-item" onclick="fillDemo('agency','AG-OFF-2024-018','agency123')">
+        <span>🏢</span> <span>agency</span> · AG-OFF-2024-018 / agency123
+      </div>
+      <div class="demo-item" onclick="fillDemo('volunteer','VS-2024-033','vol123')">
+        <span>🤝</span> <span>volunteer</span> · VS-2024-033 / vol123
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedRole = null;
+const roleNames = {
+  admin: { label:'System Administrator', icon:'🛡️', name:'Admin Officer' },
+  coordinator: { label:'District Coordinator', icon:'📋', name:'District Officer' },
+  agency: { label:'Agency Officer', icon:'🏢', name:'Agency Officer' },
+  volunteer: { label:'Volunteer Supervisor', icon:'🤝', name:'Vol. Supervisor' },
+};
+
+function selectRole(role, icon, label) {
+  selectedRole = role;
+  document.querySelectorAll('.role-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('role-' + role).classList.add('selected');
+  const d = document.getElementById('roleDisplay');
+  d.classList.add('has-role');
+  d.innerHTML = `<span class="sr-icon">${icon}</span><span class="sr-text">${label}</span>`;
+}
+
+function fillDemo(role, uid, pwd) {
+  selectRole(role, roleNames[role].icon, roleNames[role].label);
+  document.getElementById('uid').value = uid;
+  document.getElementById('pwd').value = pwd;
+}
+
+function doLogin() {
+  const uid = document.getElementById('uid').value.trim();
+  const pwd = document.getElementById('pwd').value.trim();
+  const err = document.getElementById('errMsg');
+
+  if (!selectedRole || !uid || !pwd) {
+    err.textContent = !selectedRole ? 'Please select a role first.' : 'Please fill all fields.';
+    err.classList.add('show');
+    return;
+  }
+  err.classList.remove('show');
+
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'Authenticating…';
+  btn.disabled = true;
+
+  // Save session
+  setTimeout(() => {
+    const r = roleNames[selectedRole];
+    sessionStorage.setItem('lifeline_session', JSON.stringify({
+      role: selectedRole,
+      name: r.name,
+      uid: uid,
+      ts: Date.now()
+    }));
+    window.location.href = 'dashboard.html';
+  }, 1000);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resources — LIFELINE</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebarRoot"></div>
+<div class="main">
+  <div id="topbarRoot"></div>
+  <div class="content">
+    <div class="page-header">
+      <h2>Resource Management</h2>
+      <p>Track all disaster relief resources — inventory, allocation, and dispatch to camps</p>
+      <div class="header-accent"></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Resources</div><div class="stat-val" id="c1">0</div><div class="stat-sub">Items catalogued</div></div>
+      <div class="stat-card"><div class="stat-label">Dispatched Today</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Units sent out</div></div>
+      <div class="stat-card"><div class="stat-label">Low Stock Alerts</div><div class="stat-val" id="c3">0</div><div class="stat-sub">Needs restock</div></div>
+      <div class="stat-card"><div class="stat-label">Allocated to Camps</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Active allocations</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>📦 RESOURCE INVENTORY</h3>
+        <div class="actions">
+          <button class="btn btn-outline btn-sm" onclick="filterType('All')">All</button>
+          <button class="btn btn-outline btn-sm" onclick="filterType('Food')">🍱 Food</button>
+          <button class="btn btn-outline btn-sm" onclick="filterType('Medical')">🩺 Medical</button>
+          <button class="btn btn-outline btn-sm" onclick="filterType('Equipment')">🚤 Equipment</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('resourceModal')">+ Add Resource</button>
+        </div>
+      </div>
+      <div style="padding:14px 22px">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search resources…" oninput="filterRes()">
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Resource ID</th><th>Name</th><th>Type</th><th>Quantity</th><th>Allocated To</th><th>Disaster</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="resourceBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resourceModal">
+  <div class="modal">
+    <div class="modal-header"><h3>📦 ADD RESOURCE</h3><button class="modal-close" onclick="closeModal('resourceModal')">✕</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Resource ID</label><input type="text" id="r_id" placeholder="e.g. RES-2025-044"></div>
+      <div class="form-group"><label>Resource Name</label><input type="text" id="r_name" placeholder="Name"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label><select id="r_type"><option>Food</option><option>Medical</option><option>Equipment</option><option>Clothing</option><option>Shelter</option><option>Water</option></select></div>
+      <div class="form-group"><label>Quantity</label><input type="number" id="r_qty" placeholder="Units"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Allocated to Camp</label><select id="r_camp"><option>Camp #1 — Patna</option><option>Camp #3 — Kutch</option><option>Camp #5 — Guwahati</option><option>Central Warehouse</option></select></div>
+      <div class="form-group"><label>Associated Disaster</label><select id="r_dis"><option>Bihar Floods 2025</option><option>Cyclone Biparjoy</option><option>Assam Floods 2025</option><option>General Stock</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('resourceModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addResource()">Add Resource</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="global-toast"></div>
+<script src="shared.js"></script>
+<script>
+const auth = requireAuth('resources');
+if(!auth){}else{
+  document.getElementById('sidebarRoot').innerHTML=buildSidebar('resources');
+  document.getElementById('topbarRoot').innerHTML=buildTopbar('Resources','Inventory');
+  if(auth.denied){ document.querySelector('.content').innerHTML=renderAccessDenied('Resource Management'); }
+  else {
+    const resources=[
+      {id:'RES-001',name:'Food Packets (RTE)',type:'Food',qty:8200,camp:'Camp #1 — Patna',disaster:'Bihar Floods 2025',status:'In Stock'},
+      {id:'RES-002',name:'Drinking Water (20L)',type:'Water',qty:4100,camp:'Camp #3 — Kutch',disaster:'Cyclone Biparjoy',status:'In Stock'},
+      {id:'RES-003',name:'Medical First Aid Kit',type:'Medical',qty:1450,camp:'Camp #5 — Guwahati',disaster:'Assam Floods 2025',status:'Low Stock'},
+      {id:'RES-004',name:'Rescue Boats (Inflatable)',type:'Equipment',qty:87,camp:'Central Warehouse',disaster:'Bihar Floods 2025',status:'In Stock'},
+      {id:'RES-005',name:'Emergency Shelter Tents',type:'Shelter',qty:3900,camp:'Camp #3 — Kutch',disaster:'Cyclone Biparjoy',status:'Critical'},
+      {id:'RES-006',name:'Water Purification Tablets',type:'Medical',qty:25000,camp:'Camp #1 — Patna',disaster:'Bihar Floods 2025',status:'In Stock'},
+      {id:'RES-007',name:'Blankets / Quilts',type:'Clothing',qty:6200,camp:'Camp #5 — Guwahati',disaster:'Assam Floods 2025',status:'In Stock'},
+      {id:'RES-008',name:'Generator Sets (5KVA)',type:'Equipment',qty:34,camp:'Central Warehouse',disaster:'General Stock',status:'Low Stock'},
+      {id:'RES-009',name:'Ambulances',type:'Equipment',qty:18,camp:'Camp #3 — Kutch',disaster:'Cyclone Biparjoy',status:'In Stock'},
+      {id:'RES-010',name:'Sanitation Kits',type:'Medical',qty:3200,camp:'Camp #5 — Guwahati',disaster:'Assam Floods 2025',status:'In Stock'},
+    ];
+    const icons={Food:'🍱',Water:'💧',Medical:'🩺',Equipment:'🚤',Shelter:'⛺',Clothing:'👕'};
+    function sBadge(s){ return s==='Critical'?`<span class="badge badge-danger">Critical</span>`:s==='Low Stock'?`<span class="badge badge-warning">Low Stock</span>`:`<span class="badge badge-active">In Stock</span>`; }
+    function renderRes(data){
+      const tb=document.getElementById('resourceBody');
+      if(!data.length){tb.innerHTML=`<tr><td colspan=8><div class="empty-state"><div class="ei">📦</div><p>No resources found</p></div></td></tr>`;return;}
+      tb.innerHTML=data.map((r,i)=>`<tr style="animation:fadeUp 0.3s ${i*0.06}s both">
+        <td><strong>#${r.id}</strong></td>
+        <td>${icons[r.type]||'📦'} ${r.name}</td>
+        <td><span class="badge badge-cyan">${r.type}</span></td>
+        <td><strong>${r.qty.toLocaleString('en-IN')}</strong></td>
+        <td style="font-size:0.78rem">${r.camp}</td>
+        <td style="font-size:0.75rem;color:var(--muted)">${r.disaster}</td>
+        <td>${sBadge(r.status)}</td>
+        <td>
+          <button class="btn btn-success btn-sm" onclick="dispatch('${r.id}')">Dispatch</button>
+          <button class="btn btn-danger btn-sm" onclick="removeR('${r.id}')">✕</button>
+        </td>
+      </tr>`).join('');
+    }
+    renderRes(resources);
+    let cf='All';
+    window.filterType=function(t){cf=t;filterRes();};
+    window.filterRes=function(){
+      const q=document.getElementById('searchInput').value.toLowerCase();
+      let d=resources.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+      if(cf!=='All') d=d.filter(r=>r.type===cf);
+      renderRes(d);
+    };
+    window.dispatch=function(id){const r=resources.find(x=>x.id===id);showToast(`Dispatching ${r.name} ✓`);logAudit('DISPATCH',`Dispatched ${r.name}`);};
+    window.addResource=function(){
+      const id=document.getElementById('r_id').value.trim(); const name=document.getElementById('r_name').value.trim();
+      if(!id||!name){showToast('Fill required fields','error');return;}
+      resources.unshift({id,name,type:document.getElementById('r_type').value,qty:parseInt(document.getElementById('r_qty').value)||0,camp:document.getElementById('r_camp').value,disaster:document.getElementById('r_dis').value,status:'In Stock'});
+      renderRes(resources);closeModal('resourceModal');showToast('Resource added ✓');logAudit('ADD_RESOURCE',`Added ${name}`);
+    };
+    window.removeR=function(id){const i=resources.findIndex(r=>r.id===id);if(i>-1){resources.splice(i,1);renderRes(resources);showToast('Removed','error');}};
+    window.addEventListener('load',()=>{
+      animateCount(document.getElementById('c1'),resources.length);
+      animateCount(document.getElementById('c2'),1247);
+      animateCount(document.getElementById('c3'),resources.filter(r=>r.status==='Low Stock'||r.status==='Critical').length);
+      animateCount(document.getElementById('c4'),resources.filter(r=>r.camp!=='Central Warehouse').length);
+    });
+  }
+}
+</script>
+</body>
+</html>

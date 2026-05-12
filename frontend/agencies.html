@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agencies — LIFELINE</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebarRoot"></div>
+<div class="main">
+  <div id="topbarRoot"></div>
+  <div class="content">
+
+    <div class="page-header">
+      <h2>Agency Management</h2>
+      <p>Directory of all agencies collaborating in disaster response operations</p>
+      <div class="header-line"></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Registered Agencies</div><div class="stat-val" id="c1">0</div><div class="stat-sub">All types</div></div>
+      <div class="stat-card"><div class="stat-label">Currently Active</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Deployed in field</div></div>
+      <div class="stat-card"><div class="stat-label">Govt Agencies</div><div class="stat-val" id="c3">0</div><div class="stat-sub">Central & State</div></div>
+      <div class="stat-card"><div class="stat-label">NGO / Private</div><div class="stat-val" id="c4">0</div><div class="stat-sub">Civil society</div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>🏢 Agency Directory</h3>
+        <div class="actions">
+          <button class="btn btn-outline btn-sm" onclick="filterAgency('All')">All</button>
+          <button class="btn btn-outline btn-sm" onclick="filterAgency('Government')">Govt</button>
+          <button class="btn btn-outline btn-sm" onclick="filterAgency('NGO')">NGO</button>
+          <button class="btn btn-outline btn-sm" onclick="filterAgency('Military')">Military</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('agencyModal')">+ Add Agency</button>
+        </div>
+      </div>
+      <div style="padding:12px 20px">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search agencies by name, location, type…" oninput="filterRes()">
+        </div>
+      </div>
+      <table id="agencyTable">
+        <thead>
+          <tr>
+            <th>Agency ID</th><th>Name</th><th>Type</th><th>Location</th>
+            <th>Collaborates With</th><th>Active Disasters</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="agencyBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- Add Agency Modal -->
+<div class="modal-overlay" id="agencyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🏢 Register Agency</h3>
+      <button class="modal-close" onclick="closeModal('agencyModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Agency ID</label>
+        <input type="text" id="a_id" placeholder="e.g. AG-2025-012">
+      </div>
+      <div class="form-group">
+        <label>Agency Name</label>
+        <input type="text" id="a_name" placeholder="Full name of agency">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Type</label>
+        <select id="a_type">
+          <option>Government</option><option>NGO</option><option>Military</option>
+          <option>Private</option><option>International</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Location / HQ</label>
+        <input type="text" id="a_loc" placeholder="City, State">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Contact Person</label>
+        <input type="text" id="a_contact" placeholder="Nodal officer name">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" id="a_phone" placeholder="Contact number">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Collaborates With (Other Agencies)</label>
+      <input type="text" id="a_collab" placeholder="e.g. NDRF, Red Cross, State SDRFs…">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('agencyModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addAgency()">Register Agency</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="global-toast"></div>
+<script src="shared.js"></script>
+<script>
+document.getElementById('sidebarRoot').innerHTML = buildSidebar('agencies');
+document.getElementById('topbarRoot').innerHTML = buildTopbar('Agencies', 'Directory');
+
+const agencies = [
+  { id:'AG-001', name:'National Disaster Response Force (NDRF)', type:'Government', location:'New Delhi', collab:'SDRF, Army, Coast Guard', disasters:5, status:'Active' },
+  { id:'AG-002', name:'Indian Red Cross Society', type:'NGO', location:'New Delhi', collab:'WHO, MSF, NDRF', disasters:4, status:'Active' },
+  { id:'AG-003', name:'Indian Army Corps of Engineers', type:'Military', location:'New Delhi', collab:'NDRF, IAF', disasters:3, status:'Active' },
+  { id:'AG-004', name:'Bihar State SDRF', type:'Government', location:'Patna, Bihar', collab:'NDRF, Red Cross', disasters:1, status:'Active' },
+  { id:'AG-005', name:'Gujarat SDRF', type:'Government', location:'Gandhinagar, Gujarat', collab:'NDRF, Coast Guard', disasters:1, status:'Active' },
+  { id:'AG-006', name:'Doctors Without Borders (MSF)', type:'International', location:'New Delhi', collab:'Red Cross, WHO', disasters:2, status:'Active' },
+  { id:'AG-007', name:'Goonj Foundation', type:'NGO', location:'New Delhi', collab:'Red Cross, State agencies', disasters:3, status:'Active' },
+  { id:'AG-008', name:'Indian Coast Guard', type:'Military', location:'New Delhi', collab:'Navy, NDRF', disasters:2, status:'Standby' },
+  { id:'AG-009', name:'Assam Disaster Management Authority', type:'Government', location:'Guwahati, Assam', collab:'NDRF, SDRF', disasters:1, status:'Active' },
+];
+
+function typeBadge(t){
+  const m={'Government':'badge-active','Military':'badge-danger','NGO':'badge-warning','International':'badge-info','Private':'badge-info'};
+  return `<span class="badge ${m[t]||'badge-info'}">${t}</span>`;
+}
+
+function renderAgencies(data){
+  const tb=document.getElementById('agencyBody');
+  if(!data.length){ tb.innerHTML=`<tr><td colspan=8><div class="empty-state"><div class="empty-icon">🏢</div><p>No agencies found</p></div></td></tr>`; return; }
+  tb.innerHTML=data.map((a,i)=>`
+    <tr style="animation:fadeInUp 0.3s ${i*0.06}s both">
+      <td><strong>#${a.id}</strong></td>
+      <td>${a.name}</td>
+      <td>${typeBadge(a.type)}</td>
+      <td>${a.location}</td>
+      <td style="font-size:0.75rem;color:var(--muted)">${a.collab}</td>
+      <td style="text-align:center">${a.disasters}</td>
+      <td><span class="badge ${a.status==='Active'?'badge-active':'badge-warning'}">${a.status}</span></td>
+      <td>
+        <button class="btn btn-outline btn-sm">View</button>
+        <button class="btn btn-danger btn-sm" onclick="removeA('${a.id}')">✕</button>
+      </td>
+    </tr>`).join('');
+}
+renderAgencies(agencies);
+
+let currentFilter='All';
+function filterAgency(t){
+  currentFilter=t;
+  filterRes();
+}
+function filterRes(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  let d=agencies.filter(a=>JSON.stringify(a).toLowerCase().includes(q));
+  if(currentFilter!=='All') d=d.filter(a=>a.type===currentFilter);
+  renderAgencies(d);
+}
+
+function addAgency(){
+  const id=document.getElementById('a_id').value.trim();
+  const name=document.getElementById('a_name').value.trim();
+  if(!id||!name){ showToast('Fill required fields','error'); return; }
+  agencies.unshift({id,name,type:document.getElementById('a_type').value,
+    location:document.getElementById('a_loc').value,
+    collab:document.getElementById('a_collab').value,disasters:0,status:'Active'});
+  renderAgencies(agencies);
+  closeModal('agencyModal');
+  showToast('Agency registered ✓');
+}
+function removeA(id){ const i=agencies.findIndex(a=>a.id===id); if(i>-1){ agencies.splice(i,1); renderAgencies(agencies); showToast('Removed','error'); } }
+
+window.addEventListener('load',()=>{
+  animateCount(document.getElementById('c1'),agencies.length);
+  animateCount(document.getElementById('c2'),agencies.filter(a=>a.status==='Active').length);
+  animateCount(document.getElementById('c3'),agencies.filter(a=>a.type==='Government').length);
+  animateCount(document.getElementById('c4'),agencies.filter(a=>a.type==='NGO'||a.type==='Private').length);
+});
+</script>
+</body>
+</html>

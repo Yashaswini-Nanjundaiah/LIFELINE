@@ -1,76 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeLine — Login | National Disaster Management Authority</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIFELINE — Disaster Management Information System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060d1a;
+  --surface: #0c1829;
+  --cyan: #00c8ff;
+  --cyan-dim: rgba(0,200,255,0.12);
+  --cyan-glow: rgba(0,200,255,0.35);
+  --coral: #ff4d6d;
+  --amber: #ffb347;
+  --emerald: #00e676;
+  --violet: #b388ff;
+  --white: #f0f4ff;
+  --text: #b8cce0;
+  --muted: #607a99;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridShift 20s linear infinite;
+}
+@keyframes gridShift { 0%{transform:translate(0,0)} 100%{transform:translate(60px,60px)} }
+
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 800px 600px at 15% 20%, rgba(0,200,255,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 500px at 85% 70%, rgba(179,136,255,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 300px at 60% 30%, rgba(255,77,109,0.04) 0%, transparent 50%);
+}
+
+/* Ticker */
+.ticker {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,77,109,0.95);
+  height: 36px; display: flex; align-items: center; overflow: hidden;
+}
+.ticker-label {
+  background: var(--coral); padding: 0 16px; height: 100%;
+  display: flex; align-items: center; flex-shrink: 0;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
+  color: #fff; text-transform: uppercase;
+  border-right: 1px solid rgba(255,255,255,0.3);
+}
+.ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; margin-right: 8px; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
+.ticker-track {
+  display: flex; gap: 0; overflow: hidden; flex: 1;
+}
+.ticker-content {
+  display: flex; gap: 48px; white-space: nowrap;
+  font-size: 0.75rem; color: #fff; letter-spacing: 0.5px;
+  animation: ticker 30s linear infinite;
+  padding: 0 24px;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.tick-sep { color: rgba(255,255,255,0.4); margin: 0 8px; }
+
+/* Header */
+.site-header {
+  position: relative; z-index: 10;
+  padding: 56px 80px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 16px; }
+.brand-mark {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 0 30px var(--cyan-glow);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 0 20px var(--cyan-glow)} 50%{box-shadow:0 0 40px var(--cyan-glow)} }
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem; color: var(--white); letter-spacing: 3px;
+}
+.brand-sub { font-size: 0.68rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+.header-btn {
+  padding: 10px 24px; border-radius: 10px;
+  background: var(--cyan-dim); border: 1px solid rgba(0,200,255,0.3);
+  color: var(--cyan); font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.875rem; font-weight: 600; cursor: pointer;
+  text-decoration: none; transition: all 0.25s; letter-spacing: 0.5px;
+}
+.header-btn:hover {
+  background: var(--cyan); color: var(--bg);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+/* Hero */
+.hero {
+  position: relative; z-index: 10;
+  text-align: center; padding: 80px 80px 60px;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 18px; border-radius: 20px;
+  background: var(--cyan-dim); border: 1px solid rgba(0,200,255,0.25);
+  font-size: 0.72rem; color: var(--cyan); letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 600; margin-bottom: 24px;
+}
+.hero-tag::before { content:''; width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 1.5s infinite; }
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  color: var(--white); letter-spacing: 4px; line-height: 0.95;
+  margin-bottom: 20px;
+}
+.hero h1 span { color: var(--cyan); }
+.hero p {
+  font-size: 1.05rem; color: var(--muted); max-width: 580px;
+  margin: 0 auto 40px; line-height: 1.7;
+}
+.hero-cta {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+}
+.btn-cta {
+  padding: 14px 32px; border-radius: 12px; font-size: 0.95rem; font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif; cursor: pointer; transition: all 0.25s;
+  letter-spacing: 0.5px; text-decoration: none;
+}
+.btn-cta-primary {
+  background: linear-gradient(135deg, var(--cyan), #0096cc);
+  color: var(--bg); border: none;
+  box-shadow: 0 4px 20px var(--cyan-glow);
+}
+.btn-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--cyan-glow); }
+.btn-cta-outline {
+  background: transparent; color: var(--white);
+  border: 1px solid var(--border2, rgba(255,255,255,0.15));
+}
+.btn-cta-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+
+/* Stats strip */
+.stats-strip {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center; gap: 0;
+  margin: 0 80px; flex-wrap: wrap;
+  border: 1px solid rgba(255,255,255,0.07); border-radius: 16px;
+  background: rgba(12,24,41,0.8); backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+.strip-stat {
+  flex: 1; min-width: 150px;
+  padding: 24px 32px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+}
+.strip-stat:last-child { border-right: none; }
+.strip-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem; color: var(--white); letter-spacing: 1px;
+  animation: countUp 2s ease both;
+}
+.strip-val.c { color: var(--cyan); }
+.strip-val.r { color: var(--coral); }
+.strip-val.a { color: var(--amber); }
+.strip-val.g { color: var(--emerald); }
+.strip-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+/* Feature grid */
+.features {
+  position: relative; z-index: 10;
+  padding: 80px 80px 40px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.feat-card {
+  background: var(--surface); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; padding: 28px 26px;
+  transition: all 0.3s; animation: fadeUp 0.5s ease both;
+  cursor: default;
+}
+.feat-card:hover {
+  transform: translateY(-4px); border-color: rgba(0,200,255,0.25);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 14px;
+}
+.feat-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem; color: var(--white); letter-spacing: 1px; margin-bottom: 8px;
+}
+.feat-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+.feat-tag {
+  display: inline-block; margin-top: 12px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+}
+
+/* Role cards */
+.roles-section {
+  position: relative; z-index: 10;
+  padding: 40px 80px 80px;
+}
+.roles-section h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem; color: var(--white); letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.roles-section .sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; }
+.roles-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.role-card {
+  padding: 22px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07);
+  background: var(--surface); transition: all 0.25s;
+  animation: fadeUp 0.5s ease both;
+}
+.role-card:hover { transform: translateY(-3px); }
+.role-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.role-name { font-weight: 700; color: var(--white); font-size: 0.9rem; margin-bottom: 6px; }
+.role-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+.role-pages { display: flex; flex-wrap: wrap; gap: 4px; }
+.page-pill {
+  font-size: 0.62rem; padding: 2px 8px; border-radius: 20px;
+  background: rgba(255,255,255,0.06); color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Footer */
+.site-footer {
+  position: relative; z-index: 10;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 20px 80px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.75rem; color: var(--muted);
+}
+.footer-brand { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; color: var(--cyan); font-size: 1rem; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(0,200,255,0.2); border-radius:3px; }
+</style>
 </head>
 <body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
 
-<div class="login-page">
-
-  <!-- Login Box -->
-  <div class="login-box">
-    <div class="login-brand">
-      <div class="emblem">
-        <div class="emblem-inner">L</div>
-      </div>
-      <h1>Project Lifeline</h1>
-      <p>National Disaster Management </p>
-      <div class="login-divider"></div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label" for="username">User ID / Username</label>
-      <input class="form-input" type="text" id="username" placeholder="Enter your user ID">
-    </div>
-    <div class="form-group">
-      <label class="form-label" for="password">Password</label>
-      <input class="form-input" type="password" id="password" placeholder="Enter your password">
-    </div>
-
-    <button class="btn btn-primary" style="width:100%;padding:12px;font-size:13px;" onclick="login()">
-      Sign In to Portal
-    </button>
-
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #E8E6DF;text-align:center;">
-      <span style="font-size:12px;color:#5A5A6A;">For access issues contact: </span>
-      <a href="tel:011-24363260" style="font-size:12px;color:#0A2D5E;font-weight:600;">011-24363260</a>
+<!-- Live Alert Ticker -->
+<div class="ticker">
+  <div class="ticker-label"><span class="ticker-dot"></span>LIVE</div>
+  <div class="ticker-track">
+    <div class="ticker-content" id="tickerContent">
+      🔴 Red Alert — Cyclone Biparjoy approaching Gujarat coast <span class="tick-sep">|</span>
+      🌊 Bihar Floods 2025 — 89,000+ affected <span class="tick-sep">|</span>
+      🏕️ 87 relief camps operational nationwide <span class="tick-sep">|</span>
+      🚨 Landslide risk — Chamoli district, Uttarakhand <span class="tick-sep">|</span>
+      👥 48,320 victims registered across all disasters <span class="tick-sep">|</span>
+      🟠 Orange Alert — Heavy rainfall, Northeast India <span class="tick-sep">|</span>
+      🔴 Red Alert — Cyclone Biparjoy approaching Gujarat coast <span class="tick-sep">|</span>
+      🌊 Bihar Floods 2025 — 89,000+ affected <span class="tick-sep">|</span>
+      🏕️ 87 relief camps operational nationwide <span class="tick-sep">|</span>
+      🚨 Landslide risk — Chamoli district, Uttarakhand <span class="tick-sep">|</span>
     </div>
   </div>
-
-  <!-- Footer note -->
-  <p style="margin-top:1.5rem;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-align:center;">
-    Ministry of Home Affairs &nbsp;|&nbsp; Government of India &nbsp;|&nbsp; Authorised Personnel Only
-  </p>
-
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- Header -->
+<div class="site-header">
+  <div class="brand">
+    <div class="brand-mark">⚡</div>
+    <div>
+      <div class="brand-name">LIFELINE</div>
+      <div class="brand-sub">National Disaster Management Information System</div>
+    </div>
+  </div>
+  <a href="login.html" class="header-btn">→ Official Sign In</a>
+</div>
 
-<script src="script.js"></script>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">Government of India · Ministry of Home Affairs</div>
+  <h1>DISASTER<br><span>MANAGEMENT</span><br>COMMAND CENTER</h1>
+  <p>A unified command platform for real-time coordination of disaster response operations across the nation — tracking victims, relief camps, resources and agencies.</p>
+  <div class="hero-cta">
+    <a href="login.html" class="btn-cta btn-cta-primary">→ Enter System</a>
+    <a href="#features" class="btn-cta btn-cta-outline">View Capabilities</a>
+  </div>
+</div>
+
+<!-- Stats Strip -->
+<div class="stats-strip">
+  <div class="strip-stat"><div class="strip-val c" id="s1">0</div><div class="strip-label">Active Disasters</div></div>
+  <div class="strip-stat"><div class="strip-val r" id="s2">0</div><div class="strip-label">Registered Victims</div></div>
+  <div class="strip-stat"><div class="strip-val a" id="s3">0</div><div class="strip-label">Relief Camps</div></div>
+  <div class="strip-stat"><div class="strip-val g" id="s4">0</div><div class="strip-label">Volunteers</div></div>
+  <div class="strip-stat"><div class="strip-val c" id="s5">0</div><div class="strip-label">Agencies</div></div>
+</div>
+
+<!-- Features -->
+<div class="features" id="features">
+  <div class="feat-card" style="animation-delay:0.1s">
+    <div class="feat-icon" style="background:rgba(0,200,255,0.12)">🌪️</div>
+    <h3>Disaster Registry</h3>
+    <p>Track all disasters in real-time — type, severity, affected populations, and operational status across all states.</p>
+    <span class="feat-tag" style="background:rgba(0,200,255,0.12);color:#00c8ff">Live Tracking</span>
+  </div>
+  <div class="feat-card" style="animation-delay:0.15s">
+    <div class="feat-icon" style="background:rgba(255,77,109,0.12)">👥</div>
+    <h3>Victim Management</h3>
+    <p>Register and track displaced persons — identity, injury severity, shelter assignment, and missing persons.</p>
+    <span class="feat-tag" style="background:rgba(255,77,109,0.12);color:#ff4d6d">48K+ Records</span>
+  </div>
+  <div class="feat-card" style="animation-delay:0.2s">
+    <div class="feat-icon" style="background:rgba(0,230,118,0.12)">🏕️</div>
+    <h3>Relief Camps</h3>
+    <p>Monitor camp capacity, occupancy, resources, and coordinator details across all operational relief centres.</p>
+    <span class="feat-tag" style="background:rgba(0,230,118,0.12);color:#00e676">87 Active</span>
+  </div>
+  <div class="feat-card" style="animation-delay:0.25s">
+    <div class="feat-icon" style="background:rgba(255,179,71,0.12)">📦</div>
+    <h3>Resource Inventory</h3>
+    <p>Real-time tracking of food, medical supplies, equipment, and water resources — dispatch and allocation management.</p>
+    <span class="feat-tag" style="background:rgba(255,179,71,0.12);color:#ffb347">10 Categories</span>
+  </div>
+  <div class="feat-card" style="animation-delay:0.3s">
+    <div class="feat-icon" style="background:rgba(179,136,255,0.12)">🚨</div>
+    <h3>Alert Centre</h3>
+    <p>Issue and manage Red, Orange, Yellow and Green alerts to districts, agencies, and the public in real-time.</p>
+    <span class="feat-tag" style="background:rgba(179,136,255,0.12);color:#b388ff">Multi-Level</span>
+  </div>
+  <div class="feat-card" style="animation-delay:0.35s">
+    <div class="feat-icon" style="background:rgba(255,179,71,0.12)">🛡️</div>
+    <h3>Admin Control</h3>
+    <p>Role-based access control, user management, full audit trails, and system-wide analytics for administrators.</p>
+    <span class="feat-tag" style="background:rgba(255,179,71,0.12);color:#ffb347">4 Roles</span>
+  </div>
+</div>
+
+<!-- Roles section -->
+<div class="roles-section">
+  <h2>Role-Based Access</h2>
+  <p class="sub">Each user sees only what they need — tailored dashboards based on their role</p>
+  <div class="roles-grid">
+    <div class="role-card" style="animation-delay:0.1s;border-color:rgba(179,136,255,0.25)">
+      <div class="role-icon">🛡️</div>
+      <div class="role-name">System Administrator</div>
+      <div class="role-desc">Full system access — manages users, views audit logs, controls all modules</div>
+      <div class="role-pages">
+        <span class="page-pill">Dashboard</span>
+        <span class="page-pill">All Pages</span>
+        <span class="page-pill">Admin Panel</span>
+        <span class="page-pill">Audit Logs</span>
+      </div>
+    </div>
+    <div class="role-card" style="animation-delay:0.15s;border-color:rgba(0,200,255,0.25)">
+      <div class="role-icon">📋</div>
+      <div class="role-name">District Coordinator</div>
+      <div class="role-desc">Manages disaster response, victims and alerts within their district/zone</div>
+      <div class="role-pages">
+        <span class="page-pill">Dashboard</span>
+        <span class="page-pill">Disasters</span>
+        <span class="page-pill">Victims</span>
+        <span class="page-pill">Relief</span>
+        <span class="page-pill">Alerts</span>
+      </div>
+    </div>
+    <div class="role-card" style="animation-delay:0.2s;border-color:rgba(255,179,71,0.25)">
+      <div class="role-icon">🏢</div>
+      <div class="role-name">Agency Officer</div>
+      <div class="role-desc">Oversees resource dispatch, volunteer coordination and camp management</div>
+      <div class="role-pages">
+        <span class="page-pill">Dashboard</span>
+        <span class="page-pill">Resources</span>
+        <span class="page-pill">Relief Camps</span>
+        <span class="page-pill">Volunteers</span>
+      </div>
+    </div>
+    <div class="role-card" style="animation-delay:0.25s;border-color:rgba(0,230,118,0.25)">
+      <div class="role-icon">🤝</div>
+      <div class="role-name">Volunteer Supervisor</div>
+      <div class="role-desc">Manages volunteer assignments and deployment to active disaster camps</div>
+      <div class="role-pages">
+        <span class="page-pill">Dashboard</span>
+        <span class="page-pill">Volunteers</span>
+        <span class="page-pill">Relief Camps</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="site-footer">
+  <div>
+    <span class="footer-brand">LIFELINE</span> &nbsp; National Disaster Management Information System
+  </div>
+  <div>For Official Use Only &nbsp;·&nbsp; All access is monitored and logged &nbsp;·&nbsp; NDMIS v3.0</div>
+</div>
+
 <script>
-  function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    if (username === "" || password === "") {
-      showToast("Please enter your User ID and Password.");
-      return;
-    }
-    showToast("Authentication successful. Redirecting...");
-    setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
-  }
+// Animate counters
+function animCount(el, target, suffix='') {
+  let start = 0;
+  const step = target / 80;
+  const tick = () => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.floor(start).toLocaleString('en-IN') + suffix;
+    if (start < target) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
 
-  function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 3000);
-  }
-
-  document.addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animCount(document.getElementById('s1'), 11);
+    animCount(document.getElementById('s2'), 48320);
+    animCount(document.getElementById('s3'), 87);
+    animCount(document.getElementById('s4'), 3841);
+    animCount(document.getElementById('s5'), 47);
+  }, 300);
+});
 </script>
-
 </body>
 </html>

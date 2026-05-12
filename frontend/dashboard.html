@@ -1,221 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — LifeLine | NDMA</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — LIFELINE</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.map-box {
+  background: rgba(0,0,0,0.3); border-radius: 10px;
+  height: 220px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; color: var(--muted); font-size: 0.85rem;
+}
+.map-box::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 45%, rgba(0,200,255,0.2) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(255,77,109,0.18) 0%, transparent 35%),
+    radial-gradient(circle at 55% 25%, rgba(255,179,71,0.15) 0%, transparent 30%);
+  animation: mapPulse 3s ease-in-out infinite;
+}
+@keyframes mapPulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+.map-dot {
+  position: absolute; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--coral); animation: dotBlink 1.5s infinite;
+}
+.map-dot::after {
+  content: ''; position: absolute; inset: -5px; border-radius: 50%;
+  border: 2px solid var(--coral); animation: ripple 1.5s infinite;
+}
+@keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes ripple { 0%{transform:scale(0.5);opacity:1} 100%{transform:scale(2.5);opacity:0} }
+.map-dot:nth-child(1){ top:35%;left:28%; }
+.map-dot:nth-child(2){ top:55%;left:62%;background:var(--cyan); }
+.map-dot:nth-child(2)::after{ border-color:var(--cyan); }
+.map-dot:nth-child(3){ top:22%;left:68%;animation-delay:0.7s; background:var(--amber); }
+.map-dot:nth-child(3)::after{ border-color:var(--amber); }
+
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.activity-item:last-child { border-bottom: none; }
+.a-dot {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.2);
+}
+.a-text { font-size: 0.84rem; color: var(--text); line-height: 1.4; }
+.a-time { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+
+.progress-wrap { margin-bottom: 14px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--muted); margin-bottom: 5px; }
+.progress-bar { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.fill-cyan { background: linear-gradient(90deg, var(--cyan), #0096cc); }
+.fill-amber { background: linear-gradient(90deg, var(--amber), #e09000); }
+.fill-coral { background: linear-gradient(90deg, var(--coral), #c03050); }
+.fill-emerald { background: linear-gradient(90deg, var(--emerald), #00b350); }
+</style>
 </head>
 <body>
+<div id="sidebarRoot"></div>
+<div class="main">
+  <div id="topbarRoot"></div>
+  <div class="content">
 
-<!-- GOV TOPBAR -->
-<div class="gov-topbar">
-  <span>Government of India &nbsp;|&nbsp; Ministry of Home Affairs &nbsp;|&nbsp; National Disaster Management Authority</span>
-  <div><a href="#">Screen Reader</a><a href="#">हिन्दी</a><a href="#">Help</a></div>
+    <div class="page-header">
+      <h2>Command Dashboard</h2>
+      <p>Real-time overview of all active disaster operations across the country</p>
+      <div class="header-accent"></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Active Disasters</div><div class="stat-val" id="c1">0</div><div class="stat-sub">↑ 2 new in 24h</div></div>
+      <div class="stat-card"><div class="stat-label">Registered Victims</div><div class="stat-val" id="c2">0</div><div class="stat-sub">Across all zones</div></div>
+      <div class="stat-card"><div class="stat-label">Relief Camps Active</div><div class="stat-val" id="c3">0</div><div class="stat-sub">12,400 occupancy</div></div>
+      <div class="stat-card"><div class="stat-label">Volunteers Deployed</div><div class="stat-val" id="c4">0</div><div class="stat-sub">From 47 agencies</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>🗺️ INCIDENT MAP</h3>
+          <span class="badge badge-danger">3 Red Zones</span>
+        </div>
+        <div style="padding:16px">
+          <div class="map-box">
+            <div class="map-dot"></div>
+            <div class="map-dot"></div>
+            <div class="map-dot"></div>
+            <div style="position:relative;z-index:1;text-align:center">
+              <div style="font-size:2.2rem">🗺️</div>
+              <div>Live Incident Map</div>
+              <div style="font-size:0.7rem;margin-top:6px;display:flex;gap:12px;justify-content:center">
+                <span style="color:var(--coral)">● Cyclone</span>
+                <span style="color:var(--cyan)">● Flood</span>
+                <span style="color:var(--amber)">● Earthquake</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+            <span class="badge badge-info">🌊 Flood — 5</span>
+            <span class="badge badge-warning">🌀 Cyclone — 2</span>
+            <span class="badge badge-danger">🏔️ Earthquake — 1</span>
+            <span class="badge badge-active">☀️ Drought — 3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>📊 RESOURCE UTILIZATION</h3>
+          <a href="resources.html" id="res-link" style="font-size:0.75rem;color:var(--cyan);text-decoration:none">View All →</a>
+        </div>
+        <div style="padding:20px 22px">
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Food Packets</span><span>8,200 / 10,000</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-cyan" style="width:0" data-w="82%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Medical Kits</span><span>1,450 / 3,000</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-emerald" style="width:0" data-w="48%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Rescue Boats</span><span>87 / 120</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:0" data-w="72%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Shelter Tents</span><span>3,900 / 4,000</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-coral" style="width:0" data-w="97%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Water Tankers</span><span>42 / 80</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-cyan" style="width:0" data-w="52%"></div></div>
+          </div>
+          <div id="quicklinks" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-size:0.65rem;color:var(--muted);margin-bottom:8px;letter-spacing:1.5px;text-transform:uppercase">Quick Links</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap" id="qlinkBtns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>⚡ RECENT ACTIVITY</h3>
+          <span class="badge badge-active">Live</span>
+        </div>
+        <div style="padding:0 22px">
+          <div class="activity-item"><div class="a-dot">🌊</div><div><div class="a-text">Relief camp opened — <strong>Patna District</strong></div><div class="a-time">12 min ago · Bihar</div></div></div>
+          <div class="activity-item"><div class="a-dot">👥</div><div><div class="a-text">142 victims registered — <strong>Cyclone Zone</strong></div><div class="a-time">28 min ago · Odisha</div></div></div>
+          <div class="activity-item"><div class="a-dot">📦</div><div><div class="a-text">500 food packets dispatched to <strong>Camp #7</strong></div><div class="a-time">1 hour ago · Andhra Pradesh</div></div></div>
+          <div class="activity-item"><div class="a-dot">🚨</div><div><div class="a-text">Red Alert issued — <strong>3 coastal districts</strong></div><div class="a-time">2 hours ago · Tamil Nadu</div></div></div>
+          <div class="activity-item"><div class="a-dot">🤝</div><div><div class="a-text">NDRF deployed — <strong>Search & Rescue</strong> launched</div><div class="a-time">3 hours ago · Gujarat</div></div></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>🌪️ ACTIVE DISASTERS</h3>
+          <a href="disasters.html" id="dis-link" class="btn btn-primary btn-sm">Manage All</a>
+        </div>
+        <table>
+          <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>#D-001</strong></td><td>Cyclone Biparjoy</td><td>Cyclone</td><td><span class="badge badge-danger">Active</span></td></tr>
+            <tr><td><strong>#D-002</strong></td><td>Bihar Floods 2025</td><td>Flood</td><td><span class="badge badge-danger">Active</span></td></tr>
+            <tr><td><strong>#D-003</strong></td><td>Joshimath Landslide</td><td>Landslide</td><td><span class="badge badge-warning">Monitoring</span></td></tr>
+            <tr><td><strong>#D-004</strong></td><td>Rajasthan Drought</td><td>Drought</td><td><span class="badge badge-warning">Monitoring</span></td></tr>
+            <tr><td><strong>#D-005</strong></td><td>Manipur Earthquake</td><td>Earthquake</td><td><span class="badge badge-info">Contained</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="emblem"><div class="emblem-inner">L</div></div>
-    <div>
-      <div class="header-title">Project Lifeline</div>
-      <div class="header-dept">Integrated Emergency Response Platform &mdash; NDMA</div>
-      <div class="header-sub">Ministry of Home Affairs &nbsp;&bull;&nbsp; Government of India</div>
-    </div>
-  </div>
-</header>
+<script src="shared.js"></script>
+<script>
+const auth = requireAuth('dashboard');
+if (!auth) { /* redirected */ } else {
+  document.getElementById('sidebarRoot').innerHTML = buildSidebar('dashboard');
+  document.getElementById('topbarRoot').innerHTML = buildTopbar('Dashboard', 'Command Center');
 
-<!-- ALERT STRIP -->
-<div class="alert-strip">
-  <span class="badge" style="background:#fff;color:#A31515;">Active Alert</span>
-  <span>Cyclone Warning: Eastern coastal districts on red alert. NDRF battalions deployed. Evacuations underway.</span>
-</div>
+  if (auth.denied) {
+    document.querySelector('.content').innerHTML = renderAccessDenied('Dashboard');
+  } else {
+    const session = auth.session;
+    const allowed = (session && window.ROLES ? ROLES[session.role]?.pages : null) || [];
 
-<!-- NAV -->
-<nav class="site-nav">
-  <div class="nav-inner">
-    <div class="nav-links">
-      <a class="nav-item active" href="dashboard.html">Dashboard</a>
-      <a class="nav-item" href="request.html">Request Supplies</a>
-      <a class="nav-item" href="inventry.html">Inventory</a>
-      <a class="nav-item" href="admin.html">Admin Panel</a>
-    </div>
-    <a class="nav-logout" href="index.html">Logout</a>
-  </div>
-</nav>
+    // Build quick links based on role
+    const links = [
+      { id:'disasters', label:'Disasters', href:'disasters.html' },
+      { id:'victims', label:'Victims', href:'victims.html' },
+      { id:'agencies', label:'Agencies', href:'agencies.html' },
+      { id:'alerts', label:'🚨 Alerts', href:'alerts.html' },
+      { id:'resources', label:'Resources', href:'resources.html' },
+    ];
+    const qlinkBtns = document.getElementById('qlinkBtns');
+    if(qlinkBtns) {
+      const session2 = getSession();
+      const roleDef = session2 ? ROLES[session2.role] : null;
+      const allowedPages = roleDef ? roleDef.pages : [];
+      links.filter(l => allowedPages.includes(l.id)).forEach(l => {
+        qlinkBtns.innerHTML += `<a href="${l.href}" class="btn btn-outline btn-sm">${l.label}</a>`;
+      });
+    }
 
-<!-- MAIN -->
-<main class="page-wrap">
-  <div class="section-label">Operational Overview</div>
-  <h1 class="page-heading">Command Dashboard</h1>
-  <p class="page-subheading">Real-time situational overview &mdash; Last updated: 15 Apr 2026, 09:14 IST</p>
-  <div class="gold-rule"></div>
-
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-card red">
-      <div class="stat-num">7</div>
-      <div class="stat-label">Active Disaster Zones</div>
-    </div>
-    <div class="stat-card gold">
-      <div class="stat-num">24</div>
-      <div class="stat-label">Pending Supply Requests</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">1,248</div>
-      <div class="stat-label">NDRF Personnel Deployed</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-num">4.2L</div>
-      <div class="stat-label">Citizens in Shelters</div>
-    </div>
-  </div>
-
-  <!-- QUICK ACTIONS -->
-  <div class="section-label">Quick Access</div>
-  <div class="quick-actions" style="margin-top:0.75rem;">
-    <a class="action-card" href="request.html">
-      <div class="action-icon" style="background:#FCEBEB;">
-        <svg width="20" height="20" fill="none" stroke="#A31515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-      </div>
-      <div class="action-name">Request Supplies</div>
-      <div class="action-desc">Submit an emergency resource request</div>
-    </a>
-    <a class="action-card" href="inventry.html">
-      <div class="action-icon" style="background:#E6F1FB;">
-        <svg width="20" height="20" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-      </div>
-      <div class="action-name">View Inventory</div>
-      <div class="action-desc">Check available supplies and stock levels</div>
-    </a>
-    <a class="action-card" href="admin.html">
-      <div class="action-icon" style="background:#FAEEDA;">
-        <svg width="20" height="20" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
-      </div>
-      <div class="action-name">Admin Panel</div>
-      <div class="action-desc">Approve or reject pending requests</div>
-    </a>
-  </div>
-
-  <!-- LOWER GRID -->
-  <div class="dash-grid">
-
-    <!-- Recent Requests -->
-    <div class="card">
-      <div class="card-title">Recent Supply Requests</div>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Requestor</th>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>District Collector, Puri</td>
-            <td>Food Packets</td>
-            <td>500</td>
-            <td><span class="badge badge-gold">Pending</span></td>
-          </tr>
-          <tr>
-            <td>SDRF Unit 4, Odisha</td>
-            <td>Medical Kits</td>
-            <td>80</td>
-            <td><span class="badge badge-green">Approved</span></td>
-          </tr>
-          <tr>
-            <td>Relief Camp, Bhubaneswar</td>
-            <td>Tarpaulins</td>
-            <td>200</td>
-            <td><span class="badge badge-green">Approved</span></td>
-          </tr>
-          <tr>
-            <td>NDRF Bn 6, Chamoli</td>
-            <td>Rescue Equipment</td>
-            <td>15</td>
-            <td><span class="badge badge-red">Rejected</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Live Alerts -->
-    <div class="card">
-      <div class="card-title">Active Situation Reports</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="padding:12px;border-left:4px solid var(--red2);background:#FAFAF8;border-radius:0 2px 2px 0;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;">Odisha — Coastal Districts</span>
-            <span class="badge badge-red">High</span>
-          </div>
-          <div style="font-size:13px;color:var(--muted);">Cyclone Asna — 14 NDRF battalions deployed. 78% evacuation complete.</div>
-        </div>
-        <div style="padding:12px;border-left:4px solid var(--red2);background:#FAFAF8;border-radius:0 2px 2px 0;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;">Uttarakhand — Chamoli</span>
-            <span class="badge badge-red">High</span>
-          </div>
-          <div style="font-size:13px;color:var(--muted);">Flash flood — glacial lake outburst. SDRF mobilised.</div>
-        </div>
-        <div style="padding:12px;border-left:4px solid var(--gold);background:#FAFAF8;border-radius:0 2px 2px 0;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;">Rajasthan — Barmer</span>
-            <span class="badge badge-gold">Moderate</span>
-          </div>
-          <div style="font-size:13px;color:var(--muted);">Extreme heat wave. IMD red alert. Cooling centres operational.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Inventory Summary -->
-    <div class="card full">
-      <div class="card-title">Inventory Summary</div>
-      <table class="data-table">
-        <thead>
-          <tr><th>Supply Item</th><th>Available Units</th><th>Deployed</th><th>Stock Level</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Food Packets</td><td>50,000</td><td>12,400</td>
-            <td><div class="progress-bar-wrap"><div class="progress-bar high" style="width:75%"></div></div></td>
-            <td><span class="badge badge-green">Adequate</span></td>
-          </tr>
-          <tr>
-            <td>Medical Kits</td><td>2,000</td><td>1,600</td>
-            <td><div class="progress-bar-wrap"><div class="progress-bar mid" style="width:40%"></div></div></td>
-            <td><span class="badge badge-gold">Low</span></td>
-          </tr>
-          <tr>
-            <td>Tarpaulins / Shelter Sheets</td><td>8,000</td><td>3,200</td>
-            <td><div class="progress-bar-wrap"><div class="progress-bar high" style="width:60%"></div></div></td>
-            <td><span class="badge badge-green">Adequate</span></td>
-          </tr>
-          <tr>
-            <td>Rescue Boats</td><td>120</td><td>105</td>
-            <td><div class="progress-bar-wrap"><div class="progress-bar low" style="width:12%"></div></div></td>
-            <td><span class="badge badge-red">Critical</span></td>
-          </tr>
-          <tr>
-            <td>Water Purification Units</td><td>500</td><td>310</td>
-            <td><div class="progress-bar-wrap"><div class="progress-bar mid" style="width:38%"></div></div></td>
-            <td><span class="badge badge-gold">Low</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-</main>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  &copy; 2026 National Disaster Management Authority, Government of India &nbsp;|&nbsp;
-  <a href="#">NDMA</a> &nbsp;|&nbsp; <a href="#">MHA</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
-</footer>
-
-<script src="script.js"></script>
+    window.addEventListener('load', () => {
+      animateCount(document.getElementById('c1'), 11);
+      animateCount(document.getElementById('c2'), 48320);
+      animateCount(document.getElementById('c3'), 87);
+      animateCount(document.getElementById('c4'), 3841);
+      setTimeout(() => {
+        document.querySelectorAll('.progress-fill').forEach(el => { el.style.width = el.dataset.w; });
+      }, 400);
+    });
+  }
+}
+</script>
 </body>
 </html>
